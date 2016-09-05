@@ -1,3 +1,5 @@
+// Please follow the copyright from the original Repos here. As long as you follow their licensing, you are free to do what you
+// want with this Repo.
 //
 // Copyright (c) 2012 Krueger Systems, Inc.
 // Copyright (c) 2013 Øystein Krog (oystein.krog@gmail.com)
