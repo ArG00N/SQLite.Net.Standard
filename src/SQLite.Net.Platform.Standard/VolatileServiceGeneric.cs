@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using SQLite.Net.Interop;
+using System;
 
 namespace SQLite.Net.Platform.Generic
 {
@@ -7,7 +8,8 @@ namespace SQLite.Net.Platform.Generic
     {
         public void Write(ref int transactionDepth, int depth)
         {
-			Thread.VolatileWrite(ref transactionDepth, depth);
+            throw new NotImplementedException();
+            //Thread.VolatileWrite(ref transactionDepth, depth);
         }
     }
 }
