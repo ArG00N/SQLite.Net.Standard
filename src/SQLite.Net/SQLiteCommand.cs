@@ -38,9 +38,8 @@ namespace SQLite.Net
         [NotNull] private readonly List<Binding> _bindings;
 
         private readonly SQLiteConnection _conn;
-        private readonly ISQLitePlatform _sqlitePlatform;
-        private const string DateTimeFormat = "yyyy-MM-ddTHH:mm:ss.fffffffZ";
-
+        public readonly ISQLitePlatform _sqlitePlatform;
+		private const string DateTimeFormat = "yyyy-MM-ddTHH:mm:ss.fffffffZ";
         internal SQLiteCommand(ISQLitePlatform platformImplementation, SQLiteConnection conn)
         {
             _sqlitePlatform = platformImplementation;
@@ -78,6 +77,61 @@ namespace SQLite.Net
                 }
             }
             throw SQLiteException.New(r, r.ToString());
+        }
+
+        public List<Dictionary<string, object>> ExecuteDeferredQuery()
+        {
+            var retVal = new List<Dictionary<string, object>>();
+
+            var stmt = Prepare();
+            try
+            {
+                var columnCount = _sqlitePlatform.SQLiteApi.ColumnCount(stmt);
+
+                while (_sqlitePlatform.SQLiteApi.Step(stmt) == Result.Row)
+                {
+                    var rowList = new Dictionary<string, object>();
+
+                    for (var i = 0; i < columnCount; i++)
+                    {
+                        var colType = _sqlitePlatform.SQLiteApi.ColumnType(stmt, i);
+                        Type columnType = null;
+
+                        switch (colType)
+                        {
+                            case ColType.Integer:
+                                columnType = typeof(int);
+                                break;
+                            case ColType.Float:
+                                columnType = typeof(float);
+                                break;
+                            case ColType.Text:
+                                columnType = typeof(string);
+                                break;
+                            case ColType.Blob:
+                                columnType = typeof(byte[]);
+                                break;
+                            default:
+                                columnType = typeof(string);
+                                break;
+                        }
+
+                        var val = ReadCol(stmt, i, colType, columnType);
+
+                        rowList.Add(_sqlitePlatform.SQLiteApi.ColumnName16(stmt, i), val);
+                    }
+
+                    OnInstanceCreated(rowList);
+
+                    retVal.Add(rowList);
+                }
+
+                return retVal;
+            }
+            finally
+            {
+                _sqlitePlatform.SQLiteApi.Finalize(stmt);
+            }
         }
 
         [PublicAPI]
@@ -222,7 +276,8 @@ namespace SQLite.Net
             return string.Join(Environment.NewLine, parts);
         }
 
-        private IDbStatement Prepare()
+        //NOTE: Changed security modifer
+        public IDbStatement Prepare()
         {
             var stmt = _sqlitePlatform.SQLiteApi.Prepare2(_conn.Handle, CommandText);
             BindAll(stmt);
@@ -404,8 +459,9 @@ namespace SQLite.Net
             }
         }
 
+        //NOTE: Changed security modifer
         [CanBeNull]
-        private object ReadCol(IDbStatement stmt, int index, ColType type, Type clrType)
+        public object ReadCol(IDbStatement stmt, int index, ColType type, Type clrType)
         {
             var interfaces = clrType.GetTypeInfo().ImplementedInterfaces.ToList();
 
