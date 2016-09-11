@@ -91,11 +91,8 @@
       <Link>SQLitePlatformAndroid.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReflectionService.cs" />
     <Compile Include="SQLiteApiWinRT.cs" />
     <Compile Include="SQLitePlatformWinRT.cs" />
-    <Compile Include="StopwatchFactory.cs" />
-    <Compile Include="VolatileService.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

@@ -94,10 +94,6 @@
       <Project>{3AB34E91-8E1A-442F-8E66-2494B371A890}</Project>
       <Name>SQLite.Net.Async</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\SQLite.Net.Platform.Standard\SQLite.Net.Platform.Standard.csproj">
-      <Project>{f662e15a-8753-468e-a67e-3fcf45f12b80}</Project>
-      <Name>SQLite.Net.Platform.Standard</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\src\SQLite.Net\SQLite.Net.csproj">
       <Project>{4971D437-0694-4297-A8CC-146CE08C3BD9}</Project>
       <Name>SQLite.Net</Name>

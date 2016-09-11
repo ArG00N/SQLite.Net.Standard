@@ -110,6 +110,11 @@
     <Compile Include="IBlobSerializer.cs" />
     <Compile Include="NotNullConstraintViolationException.cs" />
     <Compile Include="Orm.cs" />
+    <Compile Include="Platforms\SQLiteApiAndroid.cs" />
+    <Compile Include="Platforms\SQLiteApiAndroidInternal.cs" />
+    <Compile Include="Platforms\SQLiteApiWinRT.cs" />
+    <Compile Include="Platforms\SQLitePlatformAndroid.cs" />
+    <Compile Include="Platforms\SQLitePlatformWinRT.cs" />
     <Compile Include="PreparedSqlLiteInsertCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Attributes\AutoIncrementAttribute.cs" />
@@ -120,12 +125,14 @@
     <Compile Include="Attributes\IndexedAttribute.cs" />
     <Compile Include="Attributes\MaxLengthAttribute.cs" />
     <Compile Include="Attributes\PrimaryKeyAttribute.cs" />
+    <Compile Include="ReflectionService.cs" />
     <Compile Include="SQLiteException.cs" />
     <Compile Include="SQLiteCommand.cs" />
     <Compile Include="SQLiteConnection.cs" />
     <Compile Include="SQLiteConnectionPool.cs" />
     <Compile Include="SQLiteConnectionString.cs" />
     <Compile Include="SQLiteConnectionWithLock.cs" />
+    <Compile Include="StopwatchFactory.cs" />
     <Compile Include="TableMapping.cs" />
     <Compile Include="TableQuery.cs" />
     <Compile Include="Interop\SQLiteOpenFlags.cs" />
@@ -138,6 +145,7 @@
     <Compile Include="Interop\IDbBackupHandle.cs" />
     <Compile Include="Attributes\IColumnInformationProvider.cs" />
     <Compile Include="Attributes\DefaultColumnInformationProvider.cs" />
+    <Compile Include="VolatileService.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
