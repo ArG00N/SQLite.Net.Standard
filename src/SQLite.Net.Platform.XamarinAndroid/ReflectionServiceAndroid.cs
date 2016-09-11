@@ -1,33 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using SQLite.Net.Interop;
 
-namespace SQLite.Net.Platform.XamarinAndroid
+namespace SQLite.Net
 {
-    public class ReflectionServiceAndroid : IReflectionService
+    public class ReflectionService : IReflectionService
     {
         public IEnumerable<PropertyInfo> GetPublicInstanceProperties(Type mappedType)
         {
-            return mappedType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            return from p in mappedType.GetRuntimeProperties()
+                   where
+                       ((p.GetMethod != null && p.GetMethod.IsPublic) || (p.SetMethod != null && p.SetMethod.IsPublic) ||
+                        (p.GetMethod != null && p.GetMethod.IsStatic) || (p.SetMethod != null && p.SetMethod.IsStatic))
+                   select p;
         }
 
         public object GetMemberValue(object obj, Expression expr, MemberInfo member)
         {
-            var propertyInfo = member as PropertyInfo;
-            var fieldInfo = member as FieldInfo;
-            if (propertyInfo != null)
+            if (member is PropertyInfo)
             {
-                return propertyInfo.GetValue(obj, null);
+                var m = (PropertyInfo)member;
+                return m.GetValue(obj, null);
             }
-
-            if (fieldInfo != null)
+            if (member is FieldInfo)
             {
-                return fieldInfo.GetValue(obj);
+                var m = (FieldInfo)member;
+                return m.GetValue(obj);
             }
-
-            throw new NotSupportedException("MemberExpr: " + member.GetType().FullName);
+            throw new NotSupportedException("MemberExpr: " + member.DeclaringType);
         }
     }
 }
