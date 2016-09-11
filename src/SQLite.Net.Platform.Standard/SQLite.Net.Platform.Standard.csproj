@@ -90,14 +90,11 @@
     <Compile Include="..\SQLite.Net.Platform.XamarinAndroid\SQLitePlatformAndroid.cs">
       <Link>SQLitePlatformAndroid.cs</Link>
     </Compile>
-    <Compile Include="..\SQLite.Net.Platform.XamarinAndroid\VolatileServiceAndroid.cs">
-      <Link>VolatileServiceAndroid.cs</Link>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReflectionService.cs" />
     <Compile Include="SQLiteApiWinRT.cs" />
     <Compile Include="SQLitePlatformWinRT.cs" />
-    <Compile Include="StopwatchFactoryWinRT.cs" />
+    <Compile Include="StopwatchFactory.cs" />
     <Compile Include="VolatileServiceWinRT.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -10,7 +10,7 @@ namespace SQLite.Net.Platform.XamarinAndroid
             SQLiteApi = new SQLiteApiAndroid();
             StopwatchFactory = new StopwatchFactory();
             ReflectionService = new ReflectionService();
-            VolatileService = new VolatileServiceAndroid();
+            VolatileService = new VolatileService();
         }
 
         public ISQLiteApi SQLiteApi { get; private set; }
