@@ -13,4 +13,3 @@ TestResults
 /SQLite.Net.sln.ide
 /.vs
 /nuget/SQLite.Net*
-project.lock.json

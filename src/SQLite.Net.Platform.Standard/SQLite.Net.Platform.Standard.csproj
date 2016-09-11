@@ -100,11 +100,6 @@
       <Link>VolatileServiceAndroid.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReflectionServiceWinRT.cs" />
-    <Compile Include="SQLiteApiWinRT.cs" />
-    <Compile Include="SQLitePlatformWinRT.cs" />
-    <Compile Include="StopwatchFactoryWinRT.cs" />
-    <Compile Include="VolatileServiceWinRT.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -120,6 +115,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="project.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SQLite.Net\SQLite.Net.csproj">
+      <Project>{4971d437-0694-4297-a8cc-146ce08c3bd9}</Project>
+      <Name>SQLite.Net</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
