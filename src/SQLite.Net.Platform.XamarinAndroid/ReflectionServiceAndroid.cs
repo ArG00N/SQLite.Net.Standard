@@ -10,22 +10,24 @@ namespace SQLite.Net.Platform.XamarinAndroid
     {
         public IEnumerable<PropertyInfo> GetPublicInstanceProperties(Type mappedType)
         {
-            return mappedType.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.SetProperty);
+            return mappedType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
         }
 
         public object GetMemberValue(object obj, Expression expr, MemberInfo member)
         {
-            if (member.MemberType == MemberTypes.Property)
+            var propertyInfo = member as PropertyInfo;
+            var fieldInfo = member as FieldInfo;
+            if (propertyInfo != null)
             {
-                var m = (PropertyInfo) member;
-                return m.GetValue(obj, null);
+                return propertyInfo.GetValue(obj, null);
             }
-            if (member.MemberType == MemberTypes.Field)
+
+            if (fieldInfo != null)
             {
-                var m = (FieldInfo) member;
-                return m.GetValue(obj);
+                return fieldInfo.GetValue(obj);
             }
-            throw new NotSupportedException("MemberExpr: " + member.MemberType);
+
+            throw new NotSupportedException("MemberExpr: " + member.GetType().FullName);
         }
     }
 }
