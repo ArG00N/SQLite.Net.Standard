@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics;
 using SQLite.Net.Interop;
 
-namespace SQLite.Net.Platform.WinRT
+namespace SQLite.Net
 {
-    public class StopwatchFactoryWinRT : IStopwatchFactory
+    public class StopwatchFactory : IStopwatchFactory
     {
         public IStopwatch Create()
         {

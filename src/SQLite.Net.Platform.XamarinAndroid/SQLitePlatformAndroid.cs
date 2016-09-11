@@ -1,4 +1,5 @@
 ﻿using SQLite.Net.Interop;
+using SQLite.Net.Platform.WinRT;
 
 namespace SQLite.Net.Platform.XamarinAndroid
 {
@@ -7,7 +8,7 @@ namespace SQLite.Net.Platform.XamarinAndroid
         public SQLitePlatformAndroid()
         {
             SQLiteApi = new SQLiteApiAndroid();
-            StopwatchFactory = new StopwatchFactoryAndroid();
+            StopwatchFactory = new StopwatchFactory();
             ReflectionService = new ReflectionService();
             VolatileService = new VolatileServiceAndroid();
         }
