@@ -154,12 +154,15 @@
     <Compile Include="Orm.cs" />
     <Compile Include="Platforms\SQLiteApiAndroid.cs" />
     <Compile Include="Platforms\SQLiteApiAndroidInternal.cs" />
+    <Compile Include="Platforms\SQLiteApiGeneric.cs" />
+    <Compile Include="Platforms\SQLiteApiGenericInternal.cs" />
     <Compile Include="Platforms\SQLiteApiIOS.cs" />
     <Compile Include="Platforms\SQLiteApiIOSInternal.cs" />
     <Compile Include="Platforms\SQLiteApiOSX.cs" />
     <Compile Include="Platforms\SQliteApiOSXInternal.cs" />
     <Compile Include="Platforms\SQLiteApiWinRT.cs" />
     <Compile Include="Platforms\SQLitePlatformAndroid.cs" />
+    <Compile Include="Platforms\SQLitePlatformGeneric.cs" />
     <Compile Include="Platforms\SQLitePlatformIOS.cs" />
     <Compile Include="Platforms\SQLitePlatformOSX.cs" />
     <Compile Include="Platforms\SQLitePlatformWinRT.cs" />

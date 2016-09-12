@@ -1,18 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using SQLite.Net;
 using SQLite.Net.Attributes;
-using SQLite.Net.Interop;
-using SQLite.Net.Platform.Win32;
-using Path = System.IO.Path;
-
-using SQLite;
+using SQLite.Net.Platform.Generic;
+using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace Stocks
 {
-	public class Stock
+    public class Stock
 	{
 		[PrimaryKey, AutoIncrement]
 		public int Id { get; set; }
@@ -42,7 +38,7 @@ namespace Stocks
 
 	public class Database : SQLiteConnection
 	{
-		public Database (string path) : base(new SQLitePlatformWin32(), path)
+		public Database (string path) : base(new SQLitePlatformGeneric(), path)
 		{
 			CreateTable<Stock> ();
 			CreateTable<Valuation> ();

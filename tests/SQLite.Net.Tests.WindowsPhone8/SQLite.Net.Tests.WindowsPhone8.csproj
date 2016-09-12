@@ -135,10 +135,6 @@
       <Project>{3AB34E91-8E1A-442F-8E66-2494B371A890}</Project>
       <Name>SQLite.Net.Async</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\SQLite.Net.Platform.WindowsPhone8\SQLite.Net.Platform.WindowsPhone8.csproj">
-      <Project>{741521F8-F9D8-40F4-A5D4-AED4E26841ED}</Project>
-      <Name>SQLite.Net.Platform.WindowsPhone8</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\src\SQLite.Net\SQLite.Net.csproj">
       <Project>{4971D437-0694-4297-A8CC-146CE08C3BD9}</Project>
       <Name>SQLite.Net</Name>

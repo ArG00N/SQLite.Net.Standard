@@ -74,10 +74,6 @@
       <Project>{4971D437-0694-4297-A8CC-146CE08C3BD9}</Project>
       <Name>SQLite.Net</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\SQLite.Net.Platform.Generic\SQLite.Net.Platform.Generic.csproj">
-      <Project>{F662E15A-8753-468E-A67E-3FCF45F12B89}</Project>
-      <Name>SQLite.Net.Platform.Generic</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
