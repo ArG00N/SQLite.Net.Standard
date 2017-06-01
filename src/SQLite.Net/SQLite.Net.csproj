@@ -185,6 +185,7 @@
     <Compile Include="SQLiteConnectionPool.cs" />
     <Compile Include="SQLiteConnectionString.cs" />
     <Compile Include="SQLiteConnectionWithLock.cs" />
+    <Compile Include="SQLiteCommandResult.cs" />
     <Compile Include="StopwatchFactory.cs" />
     <Compile Include="TableMapping.cs" />
     <Compile Include="TableQuery.cs" />
