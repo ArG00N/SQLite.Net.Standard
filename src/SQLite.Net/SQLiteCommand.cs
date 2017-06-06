@@ -120,7 +120,12 @@ namespace SQLite.Net
 
                         var val = ReadCol(stmt, i, colType, columnType);
                         var columnName = _sqlitePlatform.SQLiteApi.ColumnName16(stmt, i);
-                        retVal.ColumnNames.Add(columnName);
+
+                        if (!columnsHaveBeenSet)
+                        {
+                            retVal.ColumnNames.Add(columnName);
+                        }
+
                         rowList.Add(columnName, val);
                     }
 
