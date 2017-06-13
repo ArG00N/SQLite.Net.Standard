@@ -13,3 +13,57 @@ Please follow the forks backward for earlier forks.
 ## Provide flat table access with SQL queries. I.e. not being forced to use language integrated ORM like functionality. 
 
 Note: The original ORM like functionality is still available in this version but may be removed at a later date.
+
+# Example
+
+Note: This is not a complete, self inclusive example. You need to read between the lines here. This is an example of how to return a flat table of data in the SQLiteCommandResult structure. It used the ExecuteDeferredQuery method which is my main addition to the original repo.
+
+        private SQLiteCommand CreateCommand(string commandText, IList<DataParameter> parameters)
+        {
+            var command = _Connection.CreateCommand(commandText);
+
+            if (parameters == null)
+            {
+                return command;
+            }
+
+            for (var i = 0; i < parameters.Count; i++)
+            {
+                if (parameters[i].ParameterValue is DateTime dateTimeValue)
+                {
+                    var dateText = dateTimeValue.ToString(_ISOStandardDate);
+                    parameters[i] = new DataParameter(parameters[i].ParameterName, dateText);
+                }
+
+                command.Bind(parameters[i].ParameterName, parameters[i].ParameterValue);
+            }
+
+            return command;
+        }
+
+        private SQLiteCommandResult GetData(string commandText, IList<DataParameter> parameters, TableInfo tableInfo)
+        {
+            var command = CreateCommand(commandText, parameters);
+            var commandResult = command.ExecuteDeferredQuery();
+
+            if (tableInfo == null)
+            {
+                return commandResult;
+            }
+
+            foreach (var column in tableInfo.ColumnsByName)
+            {
+                foreach (var row in commandResult.Data)
+                {
+                    if (!row.ContainsKey(column.Key))
+                    {
+                        continue;
+                    }
+
+                    var theValue = row[column.Key];
+                    row[column.Key] = SQLiteDataTypeConvert(theValue, column.Value.PropertyInformation.PropertyType);
+                }
+            }
+
+            return commandResult;
+        }
