@@ -14,6 +14,8 @@ Please follow the forks backward for earlier forks.
 
 Note: The original ORM like functionality is still available in this version but may be removed at a later date.
 
+### Pull requests welcome! Any attempts to address the existing issues are welcome as I don't have time to fix them all.
+
 # Example
 
 Note: This is not a complete, self inclusive example. You need to read between the lines here. This is an example of how to return a flat table of data in the SQLiteCommandResult structure. It used the ExecuteDeferredQuery method which is my main addition to the original repo.
