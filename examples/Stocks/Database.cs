@@ -13,10 +13,18 @@ namespace Stocks
 
             Execute(
             "CREATE TABLE STOCK( " +
-            "    ID INT PRIMARY KEY     NOT NULL, " +
-            "    NAME           TEXT NOT NULL );"
+            "    Id INT PRIMARY KEY     NOT NULL, " +
+            "    Symbol           TEXT NOT NULL );"
             );
-            //CreateTable<Valuation> ();
+
+            Execute(
+            "CREATE TABLE VALUATION( " +
+            "    ID INT PRIMARY KEY     NOT NULL, " +
+            "    STOCKID           INT NOT NULL, " +
+             "    Time           TEXT NOT NULL, " +
+            "    Price           TEXT NOT NULL " +
+           ");");
+
         }
 
         public IEnumerable<Valuation> QueryValuations (Stock stock)
