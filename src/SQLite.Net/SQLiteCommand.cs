@@ -96,7 +96,7 @@ namespace SQLite.Net
                     for (var i = 0; i < columnCount; i++)
                     {
                         var colType = _sqlitePlatform.SQLiteApi.ColumnType(stmt, i);
-                        Type columnType = null;
+                        Type columnType;
 
                         switch (colType)
                         {
@@ -220,14 +220,7 @@ namespace SQLite.Net
             var nextIdx = 1;
             foreach (var b in _bindings)
             {
-                if (b.Name != null)
-                {
-                    b.Index = _sqlitePlatform.SQLiteApi.BindParameterIndex(stmt, b.Name);
-                }
-                else
-                {
-                    b.Index = nextIdx++;
-                }
+                b.Index = b.Name != null ? _sqlitePlatform.SQLiteApi.BindParameterIndex(stmt, b.Name) : nextIdx++;
 
                 BindParameter(_sqlitePlatform.SQLiteApi, stmt, b.Index, b.Value, _conn.StoreDateTimeAsTicks, _conn.Serializer);
             }
@@ -451,11 +444,7 @@ namespace SQLite.Net
             }
             if (clrType == typeof(DateTime))
             {
-                if (_conn.StoreDateTimeAsTicks)
-                {
-                    return new DateTime(_sqlitePlatform.SQLiteApi.ColumnInt64(stmt, index), DateTimeKind.Utc);
-                }
-                return DateTime.Parse(_sqlitePlatform.SQLiteApi.ColumnText16(stmt, index), CultureInfo.InvariantCulture);
+                return _conn.StoreDateTimeAsTicks ? new DateTime(_sqlitePlatform.SQLiteApi.ColumnInt64(stmt, index), DateTimeKind.Utc) : DateTime.Parse(_sqlitePlatform.SQLiteApi.ColumnText16(stmt, index), CultureInfo.InvariantCulture);
             }
             if (clrType == typeof(DateTimeOffset))
             {
@@ -464,14 +453,7 @@ namespace SQLite.Net
             if (interfaces.Contains(typeof(ISerializable<DateTime>)))
             {
                 DateTime value;
-                if (_conn.StoreDateTimeAsTicks)
-                {
-                    value = new DateTime(_sqlitePlatform.SQLiteApi.ColumnInt64(stmt, index), DateTimeKind.Utc);
-                }
-                else
-                {
-                    value = DateTime.Parse(_sqlitePlatform.SQLiteApi.ColumnText16(stmt, index), CultureInfo.InvariantCulture);
-                }
+                value = _conn.StoreDateTimeAsTicks ? new DateTime(_sqlitePlatform.SQLiteApi.ColumnInt64(stmt, index), DateTimeKind.Utc) : DateTime.Parse(_sqlitePlatform.SQLiteApi.ColumnText16(stmt, index), CultureInfo.InvariantCulture);
                 return Activator.CreateInstance(clrType, value);
             }
             if (clrType.GetTypeInfo().IsEnum)

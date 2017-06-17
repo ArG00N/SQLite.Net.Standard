@@ -202,7 +202,7 @@ namespace SQLite.Net.Platform.WinRT
         public IDbStatement Prepare2(IDbHandle db, string query)
         {
             var dbHandle = (DbHandle)db;
-            var stmt = default(Sqlite3Statement);
+            IntPtr stmt;
             var r = SQLite3.Prepare2(dbHandle.InternalDbHandle, query, query.Length, out stmt, IntPtr.Zero);
             if (r != Result.OK)
             {

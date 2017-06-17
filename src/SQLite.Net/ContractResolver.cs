@@ -36,16 +36,8 @@ namespace SQLite.Net
         
         public ContractResolver(Func<Type, bool> canCreate, Func<Type, object[], object> create)
         {
-            if (canCreate == null)
-            {
-                throw new ArgumentNullException(nameof(canCreate));
-            }
-            if (create == null)
-            {
-                throw new ArgumentNullException(nameof(create));
-            }
-            CanCreate = canCreate;
-            Create = create;
+            CanCreate = canCreate ?? throw new ArgumentNullException(nameof(canCreate));
+            Create = create ?? throw new ArgumentNullException(nameof(create));
         }
 
         /// <summary>
@@ -54,10 +46,7 @@ namespace SQLite.Net
         /// </summary>
         /// <value>The current.</value>
         
-        public static ContractResolver Current
-        {
-            get { return _current ?? (_current = new ContractResolver()); }
-        }
+        public static ContractResolver Current => _current ?? (_current = new ContractResolver());
 
         /// <summary>
         ///     Gets or sets the can create function method.
