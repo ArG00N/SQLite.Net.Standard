@@ -81,7 +81,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\binaries\Windows\32\sqlite3.dll">
+    <Content Include="..\..\Dependencies\Windows\32\sqlite3.dll">
       <Link>sqlite3.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
