@@ -1,9 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Path = System.IO.Path;
-using Stocks;
 
 namespace Stocks.CommandLine
 {
@@ -36,11 +33,10 @@ namespace Stocks.CommandLine
 
             var data = database.GetData();
 
-            foreach (var asd in data.Data)
+            foreach (var row in data.Data)
             {
-                Console.WriteLine($"Price: {asd["Price"]}");
+                Console.WriteLine($"Price: {row["Price"]}");
             }
-
 
             Console.WriteLine("Done.");
 
