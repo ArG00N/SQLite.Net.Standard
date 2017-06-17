@@ -25,15 +25,13 @@ namespace SQLite.Net
                 throw new ArgumentException(nameof(member));
             }
 
-            if (member is PropertyInfo)
+            if (member is PropertyInfo m)
             {
-                var m = (PropertyInfo)member;
                 return m.GetValue(obj, null);
             }
-            if (member is FieldInfo)
+            if (member is FieldInfo m2)
             {
-                var m = (FieldInfo)member;
-                return m.GetValue(obj);
+                return m2.GetValue(obj);
             }
             throw new NotSupportedException("MemberExpr: " + member.DeclaringType);
         }
