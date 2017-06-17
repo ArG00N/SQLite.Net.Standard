@@ -20,11 +20,10 @@
 // THE SOFTWARE.
 
 using System;
-using JetBrains.Annotations;
 
 namespace SQLite.Net.Interop
 {
-    [PublicAPI]
+    
     public interface ISQLiteApi
     {
         Result Open(byte[] filename, out IDbHandle db, int flags, IntPtr zvfs);

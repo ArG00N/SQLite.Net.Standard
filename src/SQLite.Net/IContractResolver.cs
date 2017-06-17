@@ -1,5 +1,4 @@
 ﻿using System;
-using JetBrains.Annotations;
 
 namespace SQLite.Net
 {
@@ -18,7 +17,7 @@ namespace SQLite.Net
         ///     Returns true if the type can be resolved.  Note, if the default constructor is used, this will always return
         ///     true
         /// </value>
-        [PublicAPI]
+        
         Func<Type, bool> CanCreate { get; }
 
         /// <summary>
@@ -28,7 +27,7 @@ namespace SQLite.Net
         ///     if the resolve supports it.
         /// </summary>
         /// <value>The create.</value>
-        [PublicAPI]
+        
         Func<Type, object[], object> Create { get; }
 
         /// <summary>
@@ -37,7 +36,7 @@ namespace SQLite.Net
         /// <param name="type">The type.</param>
         /// <param name="constructorArgs">The constructor arguments.</param>
         /// <returns>System.Object.</returns>
-        [PublicAPI]
+        
         object CreateObject(Type type, object[] constructorArgs = null);
     }
 }

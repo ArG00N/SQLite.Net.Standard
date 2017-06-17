@@ -25,7 +25,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
-using JetBrains.Annotations;
 using SQLite.Net.Interop;
 
 namespace SQLite.Net
@@ -33,7 +32,7 @@ namespace SQLite.Net
     /// <summary>
     ///     Represents an open connection to a SQLite database.
     /// </summary>
-    [PublicAPI]
+
     public class SQLiteConnection : IDisposable
     {
         internal static readonly IDbHandle NullHandle = default(IDbHandle);
@@ -44,7 +43,7 @@ namespace SQLite.Net
         /// </summary>
         private readonly Random _rand = new Random();
 
-		private readonly object _tableMappingsLocks;
+        private readonly object _tableMappingsLocks;
         private TimeSpan _busyTimeout;
         private long _elapsedMilliseconds;
 
@@ -78,12 +77,8 @@ namespace SQLite.Net
         ///     A contract resovler for resolving interfaces to concreate types during object creation
         /// </param>
         /// 
-        [PublicAPI]
-        public SQLiteConnection([JetBrains.Annotations.NotNull] ISQLitePlatform sqlitePlatform, [JetBrains.Annotations.NotNull] string databasePath,
-            bool storeDateTimeAsTicks = true, [CanBeNull] IBlobSerializer serializer = null, [CanBeNull] IDictionary<Type, string> extraTypeMappings = null,
-            [CanBeNull] IContractResolver resolver = null)
-            : this(sqlitePlatform, databasePath, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create, storeDateTimeAsTicks,
-                serializer, extraTypeMappings, resolver)
+
+        public SQLiteConnection(ISQLitePlatform sqlitePlatform, string databasePath, bool storeDateTimeAsTicks = true, IBlobSerializer serializer = null, IDictionary<Type, string> extraTypeMappings = null, IContractResolver resolver = null) : this(sqlitePlatform, databasePath, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create, storeDateTimeAsTicks, serializer, extraTypeMappings, resolver)
         {
         }
 
@@ -113,9 +108,9 @@ namespace SQLite.Net
         ///     A contract resovler for resolving interfaces to concreate types during object creation
         /// </param>
         /// 
-        [PublicAPI]
-        public SQLiteConnection([JetBrains.Annotations.NotNull] ISQLitePlatform sqlitePlatform, string databasePath, SQLiteOpenFlags openFlags,
-            bool storeDateTimeAsTicks = true, [CanBeNull] IBlobSerializer serializer = null, [CanBeNull] IDictionary<Type, string> extraTypeMappings = null,
+
+        public SQLiteConnection( ISQLitePlatform sqlitePlatform, string databasePath, SQLiteOpenFlags openFlags,
+            bool storeDateTimeAsTicks = true, IBlobSerializer serializer = null, IDictionary<Type, string> extraTypeMappings = null,
             IContractResolver resolver = null)
         {
             if (sqlitePlatform == null)
@@ -127,7 +122,7 @@ namespace SQLite.Net
             Platform = sqlitePlatform;
             Resolver = resolver ?? ContractResolver.Current;
 
-			_tableMappingsLocks = new object();
+            _tableMappingsLocks = new object();
 
             if (string.IsNullOrEmpty(databasePath))
             {
@@ -138,7 +133,7 @@ namespace SQLite.Net
 
             IDbHandle handle;
             var databasePathAsBytes = GetNullTerminatedUtf8(DatabasePath);
-            var r = Platform.SQLiteApi.Open(databasePathAsBytes, out handle, (int) openFlags, IntPtr.Zero);
+            var r = Platform.SQLiteApi.Open(databasePathAsBytes, out handle, (int)openFlags, IntPtr.Zero);
 
             Handle = handle;
             if (r != Result.OK)
@@ -160,36 +155,35 @@ namespace SQLite.Net
             BusyTimeout = TimeSpan.FromSeconds(0.1);
         }
 
-        [CanBeNull, PublicAPI]
+
         public IBlobSerializer Serializer { get; private set; }
 
-        [CanBeNull, PublicAPI]
+
         public IDbHandle Handle { get; private set; }
 
-        [JetBrains.Annotations.NotNull, PublicAPI]
         public string DatabasePath { get; private set; }
 
-        [PublicAPI]
+
         public bool TimeExecution { get; set; }
 
-        [CanBeNull]
-        [PublicAPI]
+
+
         public ITraceListener TraceListener { get; set; }
 
-        [PublicAPI]
+
         public bool StoreDateTimeAsTicks { get; private set; }
 
-        [JetBrains.Annotations.NotNull, PublicAPI]
+
         public IDictionary<Type, string> ExtraTypeMappings { get; private set; }
 
-        [JetBrains.Annotations.NotNull, PublicAPI]
+
         public IContractResolver Resolver { get; private set; }
 
         /// <summary>
         ///     Sets a busy handler to sleep the specified amount of time when a table is locked.
         ///     The handler will sleep multiple times until a total time of <see cref="BusyTimeout" /> has accumulated.
         /// </summary>
-        [PublicAPI]
+
         public TimeSpan BusyTimeout
         {
             get { return _busyTimeout; }
@@ -198,7 +192,7 @@ namespace SQLite.Net
                 _busyTimeout = value;
                 if (Handle != NullHandle)
                 {
-                    Platform.SQLiteApi.BusyTimeout(Handle, (int) _busyTimeout.TotalMilliseconds);
+                    Platform.SQLiteApi.BusyTimeout(Handle, (int)_busyTimeout.TotalMilliseconds);
                 }
             }
         }
@@ -206,23 +200,23 @@ namespace SQLite.Net
         /// <summary>
         ///     Whether <see cref="BeginTransaction" /> has been called and the database is waiting for a <see cref="Commit" />.
         /// </summary>
-        [PublicAPI]
+
         public bool IsInTransaction
         {
             get { return _transactionDepth > 0; }
         }
 
-        [JetBrains.Annotations.NotNull, PublicAPI]
+
         public ISQLitePlatform Platform { get; private set; }
 
-        [PublicAPI]
+
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-        [PublicAPI]
+
         public void EnableLoadExtension(int onoff)
         {
             var r = Platform.SQLiteApi.EnableLoadExtension(Handle, onoff);
@@ -233,7 +227,6 @@ namespace SQLite.Net
             }
         }
 
-        [JetBrains.Annotations.NotNull]
         private static byte[] GetNullTerminatedUtf8(string s)
         {
             var utf8Length = Encoding.UTF8.GetByteCount(s);
@@ -247,7 +240,7 @@ namespace SQLite.Net
         ///     Creates a new SQLiteCommand. Can be overridden to provide a sub-class.
         /// </summary>
         /// <seealso cref="SQLiteCommand.OnInstanceCreated" />
-        [PublicAPI]
+
         protected SQLiteCommand NewCommand()
         {
             return new SQLiteCommand(Platform, this);
@@ -266,7 +259,7 @@ namespace SQLite.Net
         /// <returns>
         ///     A <see cref="SQLiteCommand" />
         /// </returns>
-        [PublicAPI]
+
         public SQLiteCommand CreateCommand(string cmdText, params object[] args)
         {
             if (!_open)
@@ -300,7 +293,7 @@ namespace SQLite.Net
         /// <returns>
         ///     The number of rows modified in the database as a result of this execution.
         /// </returns>
-        [PublicAPI]
+
         public int Execute(string query, params object[] args)
         {
             var cmd = CreateCommand(query, args);
@@ -322,7 +315,7 @@ namespace SQLite.Net
                 _sw.Stop();
                 _elapsedMilliseconds += _sw.ElapsedMilliseconds;
 
-                TraceListener.WriteLine("Finished in {0} ms ({1:0.0} s total)", _sw.ElapsedMilliseconds, _elapsedMilliseconds/1000.0);
+                TraceListener.WriteLine("Finished in {0} ms ({1:0.0} s total)", _sw.ElapsedMilliseconds, _elapsedMilliseconds / 1000.0);
             }
 
             return r;
@@ -336,7 +329,7 @@ namespace SQLite.Net
         ///     Begins a new transaction. Call <see cref="Commit" /> to end the transaction.
         /// </summary>
         /// <example cref="System.InvalidOperationException">Throws if a transaction has already begun.</example>
-        [PublicAPI]
+
         public void BeginTransaction()
         {
             // The BEGIN command only works if the transaction stack is empty, 
@@ -395,7 +388,7 @@ namespace SQLite.Net
         ///     Call <see cref="Commit" /> to end the transaction, committing all changes.
         /// </summary>
         /// <returns>A string naming the savepoint.</returns>
-        [PublicAPI]
+
         public string SaveTransactionPoint()
         {
             var depth = Interlocked.Increment(ref _transactionDepth) - 1;
@@ -439,7 +432,7 @@ namespace SQLite.Net
         ///     Rolls back the transaction that was begun by <see cref="BeginTransaction" /> or <see cref="SaveTransactionPoint" />
         ///     .
         /// </summary>
-        [PublicAPI]
+
         public void Rollback()
         {
             RollbackTo(null, false);
@@ -452,7 +445,7 @@ namespace SQLite.Net
         ///     The name of the savepoint to roll back to, as returned by <see cref="SaveTransactionPoint" />.
         ///     If savepoint is null or empty, this method is equivalent to a call to <see cref="Rollback" />
         /// </param>
-        [PublicAPI]
+
         public void RollbackTo(string savepoint)
         {
             RollbackTo(savepoint, false);
@@ -501,7 +494,7 @@ namespace SQLite.Net
         ///     The name of the savepoint to release.  The string should be the result of a call to
         ///     <see cref="SaveTransactionPoint" />
         /// </param>
-        [PublicAPI]
+
         public void Release(string savepoint)
         {
             DoSavePointExecute(savepoint, "release ");
@@ -533,7 +526,7 @@ namespace SQLite.Net
         /// <summary>
         ///     Commits the transaction that was begun by <see cref="BeginTransaction" />.
         /// </summary>
-        [PublicAPI]
+
         public void Commit()
         {
             if (Interlocked.Exchange(ref _transactionDepth, 0) != 0)
@@ -557,7 +550,7 @@ namespace SQLite.Net
         ///     of operations on the connection but should never call <see cref="BeginTransaction" /> or
         ///     <see cref="Commit" />.
         /// </param>
-        [PublicAPI]
+
         public void RunInTransaction(Action action)
         {
             try
@@ -589,7 +582,7 @@ namespace SQLite.Net
             IDbHandle destDB;
             byte[] databasePathAsBytes = GetNullTerminatedUtf8(destDBPath);
             Result r = sqliteApi.Open(databasePathAsBytes, out destDB,
-                (int) (SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite), IntPtr.Zero);
+                (int)(SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite), IntPtr.Zero);
 
             if (r != Result.OK)
             {
@@ -645,13 +638,13 @@ namespace SQLite.Net
             Dispose(false);
         }
 
-        [PublicAPI]
+
         protected void Dispose(bool disposing)
         {
             Close();
         }
 
-        [PublicAPI]
+
         public void Close()
         {
             if (_open && Handle != NullHandle)

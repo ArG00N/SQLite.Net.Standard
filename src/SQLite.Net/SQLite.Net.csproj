@@ -130,7 +130,6 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Annotations\JetBrains.cs" />
     <Compile Include="BlobSerializerDelegate.cs" />
     <Compile Include="ContractResolver.cs" />
     <Compile Include="IContractResolver.cs" />
@@ -169,9 +168,7 @@
     <Compile Include="SQLiteException.cs" />
     <Compile Include="SQLiteCommand.cs" />
     <Compile Include="SQLiteConnection.cs" />
-    <Compile Include="SQLiteConnectionPool.cs" />
     <Compile Include="SQLiteConnectionString.cs" />
-    <Compile Include="SQLiteConnectionWithLock.cs" />
     <Compile Include="SQLiteCommandResult.cs" />
     <Compile Include="StopwatchFactory.cs" />
     <Compile Include="Interop\SQLiteOpenFlags.cs" />

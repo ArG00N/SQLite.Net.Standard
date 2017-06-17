@@ -15,7 +15,6 @@
 //
 
 using System;
-using JetBrains.Annotations;
 
 namespace SQLite.Net
 {
@@ -29,7 +28,7 @@ namespace SQLite.Net
         /// </summary>
         /// <param name="obj">Object to serialize</param>
         /// <returns>Serialized blob of the object</returns>
-        [PublicAPI]
+        
         byte[] Serialize<T>(T obj);
 
         /// <summary>
@@ -38,10 +37,10 @@ namespace SQLite.Net
         /// <param name="data">Serialized object</param>
         /// <param name="type">Type of object</param>
         /// <returns>Deserialized object</returns>
-        [PublicAPI]
+        
         object Deserialize(byte[] data, Type type);
 
-        [PublicAPI]
+        
         bool CanDeserialize(Type type);
     }
 }

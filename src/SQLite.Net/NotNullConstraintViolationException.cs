@@ -20,12 +20,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using JetBrains.Annotations;
 using SQLite.Net.Interop;
 
 namespace SQLite.Net
 {
-    [PublicAPI]
+    
     public class NotNullConstraintViolationException : SQLiteException
     {
         protected NotNullConstraintViolationException(Result r, string message, object obj = null)
