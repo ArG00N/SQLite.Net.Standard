@@ -2,6 +2,7 @@ using SQLite.Net;
 using SQLite.Net.Platform.Generic;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Stocks
 {
@@ -9,10 +10,11 @@ namespace Stocks
     {
         public Database (string path) : base(new SQLitePlatformGeneric(), path)
         {
+
             Execute(
             "CREATE TABLE STOCK( " +
             "    ID INT PRIMARY KEY     NOT NULL, " +
-            "    NAME           TEXT NOT NULL; )"
+            "    NAME           TEXT NOT NULL );"
             );
             //CreateTable<Valuation> ();
         }
