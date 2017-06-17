@@ -7,7 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{49
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stocks", "examples\Stocks\Stocks.csproj", "{9E5D6B89-B69B-486B-9F7B-406BE8690589}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLite.Net", "src\SQLite.Net\SQLite.Net.csproj", "{4971D437-0694-4297-A8CC-146CE08C3BD9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLite.Net", "src\SQLite.Net.Standard\SQLite.Net.Standard.csproj", "{4971D437-0694-4297-A8CC-146CE08C3BD9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
