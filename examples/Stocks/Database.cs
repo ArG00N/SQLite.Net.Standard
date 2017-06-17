@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 namespace Stocks
 {
@@ -35,13 +36,16 @@ namespace Stocks
 
             try
             {
-                var valuations = new YahooScraper().GetValuations(stock, DateTime.Now.AddYears(1), DateTime.Now);
+                var valuations = new YahooScraper().GetValuations(stock, DateTime.Now.AddYears(1), DateTime.Now).ToList();
+
+                BeginTransaction();
 
                 foreach (var valuation in valuations)
                 {
                     Execute("INSERT INTO VALUATION (ID, STOCKID, Price) VALUES(@Param1, @Param2, @Param3);", new object[] { Guid.NewGuid().ToString(), valuation.StockId, valuation.Price });
                 }
 
+                Commit();
             }
             catch (System.Net.WebException ex)
             {
