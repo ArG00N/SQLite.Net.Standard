@@ -30,7 +30,7 @@ namespace Stocks.CommandLine
 
             Console.WriteLine("Downloading data and inserting in to table...");
 
-            database.UpdateStock("BHP.AX");
+            database.UpdateStock("GE");
 
             Console.WriteLine("Getting data from database...");
 
