@@ -323,7 +323,7 @@ namespace SQLite.Net
                     }
                     else
                     {
-                        var val = ((ISerializable<DateTime>)value).Serialize().ToUniversalTime().ToString(DateTimeFormat, CultureInfo.InvariantCulture);
+                        var val = datetSerializable.Serialize().ToUniversalTime().ToString(DateTimeFormat, CultureInfo.InvariantCulture);
                         isqLite3Api.BindText16(stmt, index, val, -1, NegativePointer);
                     }
                 }
@@ -335,10 +335,10 @@ namespace SQLite.Net
                 {
                     isqLite3Api.BindBlob(stmt, index, bytes2, bytes2.Length, NegativePointer);
                 }
-                else if (value is ISerializable<byte[]>)
+                else if (value is ISerializable<byte[]> byteSerializable2)
                 {
-                    isqLite3Api.BindBlob(stmt, index, ((ISerializable<byte[]>)value).Serialize(), ((ISerializable<byte[]>)value).Serialize().Length,
-                        NegativePointer);
+                    var serialized = byteSerializable2.Serialize();
+                    isqLite3Api.BindBlob(stmt, index, serialized, serialized.Length,NegativePointer);
                 }
                 else if (value is Guid guid)
                 {

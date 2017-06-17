@@ -27,25 +27,25 @@ namespace SQLite.Net
     
     public class NotNullConstraintViolationException : SQLiteException
     {
-        protected NotNullConstraintViolationException(Result r, string message, object obj = null)
+        protected NotNullConstraintViolationException(Result r, string message)
             : base(r, message)
         {
 
         }
 
-        internal new static NotNullConstraintViolationException New(Result r, string message)
-        {
-            return new NotNullConstraintViolationException(r, message);
-        }
+        //internal new static NotNullConstraintViolationException New(Result r, string message)
+        //{
+        //    return new NotNullConstraintViolationException(r, message);
+        //}
 
-        internal static NotNullConstraintViolationException New(Result r, string message, object obj)
-        {
-            return new NotNullConstraintViolationException(r, message, obj);
-        }
+        //internal static NotNullConstraintViolationException New(Result r, string message, object obj)
+        //{
+        //    return new NotNullConstraintViolationException(r, message);
+        //}
 
-        internal static NotNullConstraintViolationException New(SQLiteException exception, object obj)
-        {
-            return new NotNullConstraintViolationException(exception.Result, exception.Message, obj);
-        }
+        //internal static NotNullConstraintViolationException New(SQLiteException exception)
+        //{
+        //    return new NotNullConstraintViolationException(exception.Result, exception.Message);
+        //}
     }
 }

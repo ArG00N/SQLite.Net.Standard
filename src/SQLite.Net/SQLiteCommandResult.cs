@@ -5,6 +5,6 @@ namespace SQLite.Net
     public class SQLiteCommandResult
     {
         public SQLiteDataTable Data { get; } = new SQLiteDataTable();
-        public Collection<string> ColumnNames { get; set; } = new Collection<string>();
+        public Collection<string> ColumnNames { get; } = new Collection<string>();
     }
 }

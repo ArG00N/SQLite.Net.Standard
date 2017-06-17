@@ -43,7 +43,6 @@ namespace SQLite.Net
         /// </summary>
         private readonly Random _rand = new Random();
 
-        private readonly object _tableMappingsLocks;
         private TimeSpan _busyTimeout;
         private long _elapsedMilliseconds;
 
@@ -116,7 +115,7 @@ namespace SQLite.Net
             Platform = sqlitePlatform ?? throw new ArgumentNullException(nameof(sqlitePlatform));
             Resolver = resolver ?? ContractResolver.Current;
 
-            _tableMappingsLocks = new object();
+            new object();
 
             if (string.IsNullOrEmpty(databasePath))
             {
@@ -238,7 +237,7 @@ namespace SQLite.Net
         {
             if (args == null)
             {
-                throw new ArgumentException(nameof(args));
+                throw new ArgumentNullException(nameof(args));
             }
 
             if (!_open)

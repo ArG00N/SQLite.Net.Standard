@@ -132,6 +132,7 @@
     </Compile>
     <Compile Include="BlobSerializer.cs" />
     <Compile Include="ContractResolver.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IContractResolver.cs" />
     <Compile Include="Interop\ColType.cs" />
     <Compile Include="Interop\ConfigOption.cs" />

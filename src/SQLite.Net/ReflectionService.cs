@@ -22,7 +22,7 @@ namespace SQLite.Net
         {
             if (member == null)
             {
-                throw new ArgumentException(nameof(member));
+                throw new ArgumentNullException(nameof(member));
             }
 
             if (member is PropertyInfo m)
