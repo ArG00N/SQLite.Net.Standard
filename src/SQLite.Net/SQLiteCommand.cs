@@ -183,7 +183,7 @@ namespace SQLite.Net
         ///     Type safety is not possible because MonoTouch does not support virtual generic methods.
         /// </remarks>
         [PublicAPI]
-        protected virtual void OnInstanceCreated(object obj)
+        protected  void OnInstanceCreated(object obj)
         {
             // Can be overridden.
         }

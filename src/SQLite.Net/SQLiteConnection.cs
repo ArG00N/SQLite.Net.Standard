@@ -605,7 +605,7 @@ namespace SQLite.Net
         /// </summary>
         /// <seealso cref="SQLiteCommand.OnInstanceCreated" />
         [PublicAPI]
-        protected virtual SQLiteCommand NewCommand()
+        protected SQLiteCommand NewCommand()
         {
             return new SQLiteCommand(Platform, this);
         }
@@ -1832,7 +1832,7 @@ namespace SQLite.Net
         }
 
         [PublicAPI]
-        protected virtual void Dispose(bool disposing)
+        protected void Dispose(bool disposing)
         {
             Close();
         }

@@ -424,20 +424,6 @@ namespace SQLite.Net.Platform.WinRT
         [DllImport("sqlite3", EntryPoint = "sqlite3_column_bytes", CallingConvention = CallingConvention.Cdecl)]
         public static extern int ColumnBytes(IntPtr stmt, int index);
 
-        public static string ColumnString(IntPtr stmt, int index)
-        {
-            return Marshal.PtrToStringUni(SQLite3.ColumnText16(stmt, index));
-        }
-
-        public static byte[] ColumnByteArray(IntPtr stmt, int index)
-        {
-            int length = ColumnBytes(stmt, index);
-            byte[] result = new byte[length];
-            if (length > 0)
-                Marshal.Copy(ColumnBlob(stmt, index), result, 0, length);
-            return result;
-        }
-
         [DllImport("sqlite3", EntryPoint = "sqlite3_extended_errcode", CallingConvention = CallingConvention.Cdecl)]
         public static extern ExtendedResult sqlite3_extended_errcode(IntPtr db);
 
