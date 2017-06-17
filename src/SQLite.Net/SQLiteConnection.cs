@@ -154,12 +154,12 @@ namespace SQLite.Net
         }
 
 
-        public IBlobSerializer Serializer { get; private set; }
+        public IBlobSerializer Serializer { get; }
 
 
         public IDbHandle Handle { get; private set; }
 
-        private string DatabasePath { get; set; }
+        private string DatabasePath { get; }
 
 
         public bool TimeExecution { get; set; }
@@ -176,7 +176,7 @@ namespace SQLite.Net
         ///     Sets a busy handler to sleep the specified amount of time when a table is locked.
         ///     The handler will sleep multiple times until a total time of <see cref="BusyTimeout" /> has accumulated.
         /// </summary>
-        private void SetBusyTimeout(TimeSpan timeSpan)
+        public void SetBusyTimeout(TimeSpan timeSpan)
         {
             _busyTimeout = timeSpan;
             if (Handle != NullHandle)
