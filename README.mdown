@@ -15,7 +15,7 @@ Please follow the forks backward for earlier forks.
 ### Pull requests welcome! Any attempts to address the existing issues are welcome.
 
 # Quick Start
-Simply clone the repo, open the solution in Visual Studio 2017, and run the sample app to get it running.
+Simply clone the repo, open the solution in Visual Studio 2017, and run the sample app to get it running. The current sample is a .NET app, but Xamarin Forms samples will come soon. Referencing in Xamarin Forms is exactly the same
 
 # NuGet
 
