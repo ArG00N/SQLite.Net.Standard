@@ -255,60 +255,6 @@ namespace SQLite.Net
             return bytes;
         }
 
-        /// <summary>
-        ///     Creates an index for the specified table and columns.
-        /// </summary>
-        /// <param name="indexName">Name of the index to create</param>
-        /// <param name="tableName">Name of the database table</param>
-        /// <param name="columnNames">An array of column names to index</param>
-        /// <param name="unique">Whether the index should be unique</param>
-        [PublicAPI]
-        public int CreateIndex(string indexName, string tableName, string[] columnNames, bool unique = false)
-        {
-            const string sqlFormat = "create {2} index if not exists \"{3}\" on \"{0}\"(\"{1}\")";
-            var sql = string.Format(sqlFormat, tableName, string.Join("\", \"", columnNames), unique ? "unique" : "", indexName);
-            return Execute(sql);
-        }
-
-        /// <summary>
-        ///     Creates an index for the specified table and column.
-        /// </summary>
-        /// <param name="indexName">Name of the index to create</param>
-        /// <param name="tableName">Name of the database table</param>
-        /// <param name="columnName">Name of the column to index</param>
-        /// <param name="unique">Whether the index should be unique</param>
-        [PublicAPI]
-        public int CreateIndex(string indexName, string tableName, string columnName, bool unique = false)
-        {
-            return CreateIndex(indexName, tableName, new[] {columnName}, unique);
-        }
-
-        /// <summary>
-        ///     Creates an index for the specified table and column.
-        /// </summary>
-        /// <param name="tableName">Name of the database table</param>
-        /// <param name="columnName">Name of the column to index</param>
-        /// <param name="unique">Whether the index should be unique</param>
-        [PublicAPI]
-        public int CreateIndex(string tableName, string columnName, bool unique = false)
-        {
-            return CreateIndex(tableName + "_" + columnName, tableName, columnName, unique);
-        }
-
-        /// <summary>
-        ///     Creates an index for the specified table and columns.
-        /// </summary>
-        /// <param name="tableName">Name of the database table</param>
-        /// <param name="columnNames">An array of column names to index</param>
-        /// <param name="unique">Whether the index should be unique</param>
-        [PublicAPI]
-        public int CreateIndex(string tableName, string[] columnNames, bool unique = false)
-        {
-            return CreateIndex(tableName + "_" + string.Join("_", columnNames), tableName, columnNames, unique);
-        }
-
-
-
 
         /// <summary>
         ///     Creates a new SQLiteCommand. Can be overridden to provide a sub-class.
