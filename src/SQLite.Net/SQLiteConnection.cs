@@ -22,7 +22,6 @@
 //
 
 using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using SQLite.Net.Interop;
@@ -68,16 +67,12 @@ namespace SQLite.Net
         ///     Blob serializer to use for storing undefined and complex data structures. If left null
         ///     these types will thrown an exception as usual.
         /// </param>
-        /// <param name="extraTypeMappings">
-        ///     Any extra type mappings that you wish to use for overriding the default for creating
-        ///     column definitions for SQLite DDL in the class Orm (snake in Swedish).
-        /// </param>
         /// <param name="resolver">
         ///     A contract resovler for resolving interfaces to concreate types during object creation
         /// </param>
         /// 
 
-        public SQLiteConnection(ISQLitePlatform sqlitePlatform, string databasePath, bool storeDateTimeAsTicks = true, IBlobSerializer serializer = null, IDictionary<Type, string> extraTypeMappings = null, IContractResolver resolver = null) : this(sqlitePlatform, databasePath, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create, storeDateTimeAsTicks, serializer, extraTypeMappings, resolver)
+        public SQLiteConnection(ISQLitePlatform sqlitePlatform, string databasePath, bool storeDateTimeAsTicks = true, IBlobSerializer serializer = null, IContractResolver resolver = null) : this(sqlitePlatform, databasePath, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create, storeDateTimeAsTicks, serializer, resolver)
         {
         }
 
@@ -99,17 +94,12 @@ namespace SQLite.Net
         ///     Blob serializer to use for storing undefined and complex data structures. If left null
         ///     these types will thrown an exception as usual.
         /// </param>
-        /// <param name="extraTypeMappings">
-        ///     Any extra type mappings that you wish to use for overriding the default for creating
-        ///     column definitions for SQLite DDL in the class Orm (snake in Swedish).
-        /// </param>
         /// <param name="resolver">
         ///     A contract resovler for resolving interfaces to concreate types during object creation
         /// </param>
         /// 
         private SQLiteConnection(ISQLitePlatform sqlitePlatform, string databasePath, SQLiteOpenFlags openFlags,
-            bool storeDateTimeAsTicks = true, IBlobSerializer serializer = null, IDictionary<Type, string> extraTypeMappings = null,
-            IContractResolver resolver = null)
+            bool storeDateTimeAsTicks = true, IBlobSerializer serializer = null, IContractResolver resolver = null)
         {
             Serializer = serializer;
             Platform = sqlitePlatform ?? throw new ArgumentNullException(nameof(sqlitePlatform));

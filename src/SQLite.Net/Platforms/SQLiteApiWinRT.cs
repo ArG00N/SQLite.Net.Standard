@@ -205,7 +205,7 @@ namespace SQLite.Net.Platform.WinRT
         {
             if (query == null)
             {
-                throw new ArgumentException(nameof(query));
+                throw new ArgumentNullException(nameof(query));
             }
 
             var dbHandle = (DbHandle)db;
