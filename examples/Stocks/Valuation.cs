@@ -9,9 +9,9 @@ namespace Stocks
         //public DateTime Time { get; set; }
         public decimal Price { get; set; }
 
-        public override string ToString ()
+        public override string ToString()
         {
-            return string.Format ("{0:MMM dd yy}    {1:C}", Time, Price);
+            return $"Stock: {StockId} Price: {Price}";
         }
     }
 }

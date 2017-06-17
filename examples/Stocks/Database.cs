@@ -20,9 +20,9 @@ namespace Stocks
 
             Execute(
             "CREATE TABLE VALUATION( " +
-            "    ID INT PRIMARY KEY     NOT NULL, " +
+            "    ID STRING PRIMARY KEY     NOT NULL, " +
             "    STOCKID           INT NOT NULL, " +
-             //"    Time           TEXT NOT NULL, " +
+            //"    Time           TEXT NOT NULL, " +
             "    Price           TEXT NOT NULL " +
            ");");
 
@@ -57,7 +57,7 @@ namespace Stocks
 
                 foreach (var valuation in valuations)
                 {
-                    Debug.WriteLine(valuation.Price);
+                    Execute("INSERT INTO VALUATION (ID, STOCKID, Price) VALUES(@Param1, @Param2, @Param3);", new object[] { Guid.NewGuid().ToString(), valuation.StockId, valuation.Price });
                 }
 
             }
