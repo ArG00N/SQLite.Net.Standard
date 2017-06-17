@@ -19,6 +19,10 @@ Note: The original ORM like functionality is still available in this version but
 # Quick Start
 Simply clone the repo, open the solution in Visual Studio 2017, and run the sample app to get it running.
 
+# NuGet
+
+Install-Package SQLite.Net.Standard 
+
 # Example
 
 Note: This is not a complete, self inclusive example. You need to read between the lines here. This is an example of how to return a flat table of data in the SQLiteCommandResult structure. It used the ExecuteDeferredQuery method which is my main addition to the original repo.
