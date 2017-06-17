@@ -91,8 +91,8 @@ namespace SQLite.Net.Platform.WinRT
         public byte[] ColumnBlob(IDbStatement stmt, int index)
         {
             var dbStatement = (DbStatement)stmt;
-            int length = ColumnBytes(stmt, index);
-            byte[] result = new byte[length];
+            var length = ColumnBytes(stmt, index);
+            var result = new byte[length];
             if (length > 0)
                 Marshal.Copy(SQLite3.ColumnBlob(dbStatement.InternalStmt, index), result, 0, length);
             return result;
@@ -175,7 +175,7 @@ namespace SQLite.Net.Platform.WinRT
         public Result Finalize(IDbStatement stmt)
         {
             var dbStatement = (DbStatement)stmt;
-            Sqlite3Statement internalStmt = dbStatement.InternalStmt;
+            var internalStmt = dbStatement.InternalStmt;
             return SQLite3.Finalize(internalStmt);
         }
 
@@ -230,7 +230,7 @@ namespace SQLite.Net.Platform.WinRT
             var internalDestDb = (DbHandle)destHandle;
             var internalSrcDb = (DbHandle)srcHandle;
 
-            IntPtr p = SQLite3.sqlite3_backup_init(internalDestDb.InternalDbHandle,
+            var p = SQLite3.sqlite3_backup_init(internalDestDb.InternalDbHandle,
                                                                   destName,
                                                                   internalSrcDb.InternalDbHandle,
                                                                   srcName);

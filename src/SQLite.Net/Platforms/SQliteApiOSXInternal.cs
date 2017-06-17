@@ -6,10 +6,6 @@ namespace SQLite.Net.Platform.OSX
 {
     internal static class SQLiteApiOSXInternal
     {
-        static SQLiteApiOSXInternal()
-        {
-		}
-
         [DllImport("libsqlite3_for_net", EntryPoint = "sqlite3_open", CallingConvention = CallingConvention.Cdecl)]
         public static extern Result sqlite3_open([MarshalAs(UnmanagedType.LPStr)] string filename, out IntPtr db);
 
@@ -150,7 +146,7 @@ namespace SQLite.Net.Platform.OSX
 
         public static byte[] ColumnByteArray(IntPtr stmt, int index)
         {
-            int length = sqlite3_column_bytes(stmt, index);
+            var length = sqlite3_column_bytes(stmt, index);
             var result = new byte[length];
             if (length > 0)
             {

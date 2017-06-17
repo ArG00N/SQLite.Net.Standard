@@ -9,7 +9,7 @@ namespace SQLite.Net.Platform.OSX
         public Result Open(byte[] filename, out IDbHandle db, int flags, IntPtr zvfs)
         {
             IntPtr dbPtr;
-            Result r = SQLiteApiOSXInternal.sqlite3_open_v2(filename, out dbPtr, flags, zvfs);
+            var r = SQLiteApiOSXInternal.sqlite3_open_v2(filename, out dbPtr, flags, zvfs);
             db = new DbHandle(dbPtr);
             return r;
         }
@@ -74,7 +74,7 @@ namespace SQLite.Net.Platform.OSX
         {
             var internalDbHandle = (DbHandle) db;
             IntPtr stmt;
-            Result r = SQLiteApiOSXInternal.sqlite3_prepare16_v2(internalDbHandle.DbPtr, query, -1, out stmt, IntPtr.Zero);
+            var r = SQLiteApiOSXInternal.sqlite3_prepare16_v2(internalDbHandle.DbPtr, query, -1, out stmt, IntPtr.Zero);
             if (r != Result.OK)
             {
                 throw SQLiteException.New(r, Errmsg16(internalDbHandle));
@@ -220,7 +220,7 @@ namespace SQLite.Net.Platform.OSX
         	var internalDestDb = (DbHandle)destHandle;
         	var internalSrcDb = (DbHandle)srcHandle;
         
-        	IntPtr p = SQLiteApiOSXInternal.sqlite3_backup_init(internalDestDb.DbPtr, 
+        	var p = SQLiteApiOSXInternal.sqlite3_backup_init(internalDestDb.DbPtr, 
         	                                                      destName, 
         	                                                      internalSrcDb.DbPtr, 
         	                                                      srcName);

@@ -16,8 +16,6 @@ namespace SQLite.Net
     public class ContractResolver : IContractResolver
     {
         private static ContractResolver _current;
-        private readonly Func<Type, bool> _canCreate;
-        private readonly Func<Type, object[], object> _create;
 
         /// <summary>
         ///     Default Initializer for a new instance of the <see cref="ContractResolver" /> class.
@@ -46,8 +44,8 @@ namespace SQLite.Net
             {
                 throw new ArgumentNullException(nameof(create));
             }
-            _canCreate = canCreate;
-            _create = create;
+            CanCreate = canCreate;
+            Create = create;
         }
 
         /// <summary>
@@ -70,10 +68,7 @@ namespace SQLite.Net
         ///     true
         /// </value>
         
-        public Func<Type, bool> CanCreate
-        {
-            get { return _canCreate; }
-        }
+        public Func<Type, bool> CanCreate { get; }
 
         /// <summary>
         ///     Gets or sets the create function method.
@@ -83,10 +78,7 @@ namespace SQLite.Net
         /// </summary>
         /// <value>The create.</value>
         
-        public Func<Type, object[], object> Create
-        {
-            get { return _create; }
-        }
+        public Func<Type, object[], object> Create { get; }
 
         /// <summary>
         ///     Creates the object.

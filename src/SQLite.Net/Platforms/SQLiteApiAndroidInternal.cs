@@ -13,7 +13,7 @@ namespace SQLite.Net.Platform.XamarinAndroid
 
         public static byte[] ColumnByteArray(IntPtr stmt, int index)
         {
-            int length = sqlite3_column_bytes(stmt, index);
+            var length = sqlite3_column_bytes(stmt, index);
             var result = new byte[length];
             if (length > 0)
             {

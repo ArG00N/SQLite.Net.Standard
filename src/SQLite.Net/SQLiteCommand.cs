@@ -326,12 +326,12 @@ namespace SQLite.Net
                 {
                     if (storeDateTimeAsTicks)
                     {
-                        long ticks = ((DateTime)value).ToUniversalTime().Ticks;
+                        var ticks = ((DateTime)value).ToUniversalTime().Ticks;
                         isqLite3Api.BindInt64(stmt, index, ticks);
                     }
                     else
                     {
-                        string val = ((DateTime)value).ToUniversalTime().ToString(DateTimeFormat, CultureInfo.InvariantCulture);
+                        var val = ((DateTime)value).ToUniversalTime().ToString(DateTimeFormat, CultureInfo.InvariantCulture);
                         isqLite3Api.BindText16(stmt, index, val, -1, NegativePointer);
                     }
                 }
@@ -343,12 +343,12 @@ namespace SQLite.Net
                 {
                     if (storeDateTimeAsTicks)
                     {
-                        long ticks = ((ISerializable<DateTime>)value).Serialize().ToUniversalTime().Ticks;
+                        var ticks = ((ISerializable<DateTime>)value).Serialize().ToUniversalTime().Ticks;
                         isqLite3Api.BindInt64(stmt, index, ticks);
                     }
                     else
                     {
-                        string val = ((ISerializable<DateTime>)value).Serialize().ToUniversalTime().ToString(DateTimeFormat, CultureInfo.InvariantCulture);
+                        var val = ((ISerializable<DateTime>)value).Serialize().ToUniversalTime().ToString(DateTimeFormat, CultureInfo.InvariantCulture);
                         isqLite3Api.BindText16(stmt, index, val, -1, NegativePointer);
                     }
                 }

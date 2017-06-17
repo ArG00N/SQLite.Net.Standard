@@ -35,7 +35,7 @@ namespace SQLite.Net
 
     public class SQLiteConnection : IDisposable
     {
-        internal static readonly IDbHandle NullHandle = default(IDbHandle);
+        private static readonly IDbHandle NullHandle = default(IDbHandle);
 
         /// <summary>
         ///     Used to list some code that we want the MonoTouch linker
@@ -108,8 +108,7 @@ namespace SQLite.Net
         ///     A contract resovler for resolving interfaces to concreate types during object creation
         /// </param>
         /// 
-
-        public SQLiteConnection( ISQLitePlatform sqlitePlatform, string databasePath, SQLiteOpenFlags openFlags,
+        private SQLiteConnection( ISQLitePlatform sqlitePlatform, string databasePath, SQLiteOpenFlags openFlags,
             bool storeDateTimeAsTicks = true, IBlobSerializer serializer = null, IDictionary<Type, string> extraTypeMappings = null,
             IContractResolver resolver = null)
         {
@@ -117,7 +116,6 @@ namespace SQLite.Net
             {
                 throw new ArgumentNullException(nameof(sqlitePlatform));
             }
-            ExtraTypeMappings = extraTypeMappings ?? new Dictionary<Type, string>();
             Serializer = serializer;
             Platform = sqlitePlatform;
             Resolver = resolver ?? ContractResolver.Current;
@@ -152,7 +150,7 @@ namespace SQLite.Net
 
             StoreDateTimeAsTicks = storeDateTimeAsTicks;
 
-            BusyTimeout = TimeSpan.FromSeconds(0.1);
+            SetBusyTimeout(TimeSpan.FromSeconds(0.1));
         }
 
 
@@ -161,39 +159,29 @@ namespace SQLite.Net
 
         public IDbHandle Handle { get; private set; }
 
-        public string DatabasePath { get; private set; }
+        private string DatabasePath { get; set; }
 
 
         public bool TimeExecution { get; set; }
 
-
-
         public ITraceListener TraceListener { get; set; }
 
 
-        public bool StoreDateTimeAsTicks { get; private set; }
+        public bool StoreDateTimeAsTicks { get; }
 
 
-        public IDictionary<Type, string> ExtraTypeMappings { get; private set; }
-
-
-        public IContractResolver Resolver { get; private set; }
+        public IContractResolver Resolver { get; }
 
         /// <summary>
         ///     Sets a busy handler to sleep the specified amount of time when a table is locked.
         ///     The handler will sleep multiple times until a total time of <see cref="BusyTimeout" /> has accumulated.
         /// </summary>
-
-        public TimeSpan BusyTimeout
+        private void SetBusyTimeout(TimeSpan timeSpan)
         {
-            get { return _busyTimeout; }
-            set
+            _busyTimeout = timeSpan;
+            if (Handle != NullHandle)
             {
-                _busyTimeout = value;
-                if (Handle != NullHandle)
-                {
-                    Platform.SQLiteApi.BusyTimeout(Handle, (int)_busyTimeout.TotalMilliseconds);
-                }
+                Platform.SQLiteApi.BusyTimeout(Handle, (int)_busyTimeout.TotalMilliseconds);
             }
         }
 
@@ -201,13 +189,10 @@ namespace SQLite.Net
         ///     Whether <see cref="BeginTransaction" /> has been called and the database is waiting for a <see cref="Commit" />.
         /// </summary>
 
-        public bool IsInTransaction
-        {
-            get { return _transactionDepth > 0; }
-        }
+        public bool IsInTransaction => _transactionDepth > 0;
 
 
-        public ISQLitePlatform Platform { get; private set; }
+        private ISQLitePlatform Platform { get; set; }
 
 
         public void Dispose()
@@ -240,8 +225,7 @@ namespace SQLite.Net
         ///     Creates a new SQLiteCommand. Can be overridden to provide a sub-class.
         /// </summary>
         /// <seealso cref="SQLiteCommand.OnInstanceCreated" />
-
-        protected SQLiteCommand NewCommand()
+        private SQLiteCommand NewCommand()
         {
             return new SQLiteCommand(Platform, this);
         }
@@ -570,18 +554,18 @@ namespace SQLite.Net
 
         public string CreateDatabaseBackup(ISQLitePlatform platform)
         {
-            ISQLiteApiExt sqliteApi = platform.SQLiteApi as ISQLiteApiExt;
+            var sqliteApi = platform.SQLiteApi as ISQLiteApiExt;
 
             if (sqliteApi == null)
             {
                 return null;
             }
 
-            string destDBPath = this.DatabasePath + "." + DateTime.UtcNow.ToString("yyyy-MM-dd_HH-mm-ss-fff");
+            var destDBPath = DatabasePath + "." + DateTime.UtcNow.ToString("yyyy-MM-dd_HH-mm-ss-fff");
 
             IDbHandle destDB;
-            byte[] databasePathAsBytes = GetNullTerminatedUtf8(destDBPath);
-            Result r = sqliteApi.Open(databasePathAsBytes, out destDB,
+            var databasePathAsBytes = GetNullTerminatedUtf8(destDBPath);
+            var r = sqliteApi.Open(databasePathAsBytes, out destDB,
                 (int)(SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite), IntPtr.Zero);
 
             if (r != Result.OK)
@@ -590,7 +574,7 @@ namespace SQLite.Net
             }
 
             /* Open the backup object used to accomplish the transfer */
-            IDbBackupHandle bHandle = sqliteApi.BackupInit(destDB, "main", this.Handle, "main");
+            var bHandle = sqliteApi.BackupInit(destDB, "main", Handle, "main");
 
             if (bHandle == null)
             {
