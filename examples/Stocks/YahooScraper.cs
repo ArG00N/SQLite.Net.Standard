@@ -8,19 +8,7 @@ namespace Stocks
     {
         public IEnumerable<Valuation> GetValuations(Stock stock, DateTime start, DateTime end)
         {
-            //var t = "http://ichart.finance.yahoo.com/table.csv?s={0}&d={1}&e={2}&f={3}&g=d&a={4}&b={5}&c={6}&ignore=.csv";
-            ////var url = string.Format (t, stock.Symbol, end.Month - 1, end.Day, end.Year, start.Month - 1, start.Day, start.Year);
-
-            //var monthStart = start.Month - 1;
-            //var dayStart = start.Day;
-            //var yearStart = start.Year;
-            //var monthFinish = end.Month-1;
-            //var dayFinish = end.Day;
-            //var yearFinish = end.Year;
-
-            //var url = "http://ichart.yahoo.com/table.csv?s=" + stock.Symbol + "&a=" + monthStart + "&b=" + dayStart + "&c=" + yearStart + "&d=" + monthFinish + "&e=" + dayFinish + "&f=" + yearFinish;
-
-            var url = "http://finance.yahoo.com/d/quotes.csv?s=GE+PTR+MSFT&f=snd1l1yr";
+            var url = $"http://finance.yahoo.com/d/quotes.csv?s=" + stock.Symbol + "&f=snd1l1yr";
 
             Console.WriteLine("GET {0}", url);
             var req = System.Net.WebRequest.Create(url);

@@ -11,46 +11,24 @@ namespace Stocks
     {
         public Database(string path) : base(new SQLitePlatformGeneric(), path)
         {
-
-            //Execute(
-            //"CREATE TABLE STOCK( " +
-            //"    Id INT PRIMARY KEY     NOT NULL, " +
-            //"    Symbol           TEXT NOT NULL );"
-            //);
-
             Execute(
             "CREATE TABLE VALUATION( " +
             "    ID STRING PRIMARY KEY     NOT NULL, " +
             "    STOCKID           INT NOT NULL, " +
-            //"    Time           TEXT NOT NULL, " +
             "    Price           TEXT NOT NULL " +
            ");");
 
             UpdateStock("BHP.AX");
 
-        }
+            var command = CreateCommand("SELECT * FROM 'VALUATION'");
+            var data = command.ExecuteDeferredQuery();
 
-        public IEnumerable<Valuation> QueryValuations(Stock stock)
-        {
-            return null;
-            //return Table<Valuation> ().Where(x => x.StockId == stock.Id);
         }
-
-        public Valuation QueryLatestValuation(Stock stock)
-        {
-            return null;
-            //return Table<Valuation> ().Where(x => x.StockId == stock.Id).OrderByDescending(x => x.Time).Take(1).FirstOrDefault();
-        }
-
 
         public void UpdateStock(string stockSymbol)
         {
             var stock = new Stock { Symbol = stockSymbol };
 
-
-            //
-            // Get the latest valuations
-            //
             try
             {
                 var valuations = new YahooScraper().GetValuations(stock, DateTime.Now.AddYears(1), DateTime.Now);
