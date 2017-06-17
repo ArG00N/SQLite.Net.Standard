@@ -5,9 +5,8 @@ using SQLite.Net.Interop;
 namespace SQLite.Net.Platform.XamarinIOS {
 	public class SQLiteApiIOS : ISQLiteApiExt {
 		public Result Open(byte[] filename, out IDbHandle db, int flags, IntPtr zvfs) {
-			IntPtr dbPtr;
-			var r = SQLiteApiIOSInternal.sqlite3_open_v2(filename, out dbPtr, flags, zvfs);
-			db = new DbHandle(dbPtr);
+            var r = SQLiteApiIOSInternal.sqlite3_open_v2(filename, out IntPtr dbPtr, flags, zvfs);
+            db = new DbHandle(dbPtr);
 			return r;
 		}
 
@@ -59,13 +58,12 @@ namespace SQLite.Net.Platform.XamarinIOS {
 
 		public IDbStatement Prepare2(IDbHandle db, string query) {
 			var internalDbHandle = (DbHandle)db;
-			IntPtr stmt;
-			var r = SQLiteApiIOSInternal.sqlite3_prepare16_v2(internalDbHandle.DbPtr,
-			                                                            query,
-			                                                            -1,
-			                                                            out stmt,
-			                                                            IntPtr.Zero);
-			if(r != Result.OK) {
+            var r = SQLiteApiIOSInternal.sqlite3_prepare16_v2(internalDbHandle.DbPtr,
+                                                            query,
+                                                            -1,
+                                                            out IntPtr stmt,
+                                                            IntPtr.Zero);
+            if (r != Result.OK) {
 				throw SQLiteException.New(r, Errmsg16(internalDbHandle));
 			}
 			return new DbStatement(stmt);

@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using SQLite.Net.Interop;
 
-namespace SQLite.Net.Platform.Generic
+namespace SQLite.Net.Platform
 {
     internal static class SQLiteApiGenericInternal
     {
