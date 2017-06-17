@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <RuleSet Name="Rules for SQLite.Net" Description="Code analysis rules for SQLite.Net.csproj." ToolsVersion="15.0">
   <Rules AnalyzerId="Microsoft.Analyzers.ManagedCodeAnalysis" RuleNamespace="Microsoft.Rules.Managed">
+    <Rule Id="CA1804" Action="Error" />
     <Rule Id="CA1811" Action="Error" />
     <Rule Id="CA1812" Action="Error" />
   </Rules>

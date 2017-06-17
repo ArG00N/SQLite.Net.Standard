@@ -130,12 +130,10 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="ActiveInsertCommand.cs" />
     <Compile Include="Annotations\JetBrains.cs" />
     <Compile Include="Attributes\DefaultAttribute.cs" />
     <Compile Include="Attributes\NotNullAttribute.cs" />
     <Compile Include="BlobSerializerDelegate.cs" />
-    <Compile Include="CreateTablesResult.cs" />
     <Compile Include="ContractResolver.cs" />
     <Compile Include="IContractResolver.cs" />
     <Compile Include="Interop\ColType.cs" />
@@ -153,7 +151,6 @@
     <Compile Include="Interop\IDbStatement.cs" />
     <Compile Include="IBlobSerializer.cs" />
     <Compile Include="NotNullConstraintViolationException.cs" />
-    <Compile Include="Orm.cs" />
     <Compile Include="Platforms\SQLiteApiAndroid.cs" />
     <Compile Include="Platforms\SQLiteApiAndroidInternal.cs" />
     <Compile Include="Platforms\SQLiteApiGeneric.cs" />
@@ -187,7 +184,6 @@
     <Compile Include="SQLiteConnectionWithLock.cs" />
     <Compile Include="SQLiteCommandResult.cs" />
     <Compile Include="StopwatchFactory.cs" />
-    <Compile Include="TableMapping.cs" />
     <Compile Include="Interop\SQLiteOpenFlags.cs" />
     <Compile Include="Attributes\TableAttribute.cs" />
     <Compile Include="Attributes\UniqueAttribute.cs" />

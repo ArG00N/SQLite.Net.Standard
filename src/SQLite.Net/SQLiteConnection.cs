@@ -51,11 +51,11 @@ namespace SQLite.Net
         private static bool _preserveDuringLinkMagic;
 #pragma warning restore 649
         private readonly Random _rand = new Random();
-        private readonly IDictionary<string, TableMapping> _tableMappings;
+
 		private readonly object _tableMappingsLocks;
         private TimeSpan _busyTimeout;
         private long _elapsedMilliseconds;
-        private IDictionary<TableMapping, ActiveInsertCommand> _insertCommandCache;
+
         private bool _open;
         private IStopwatch _sw;
         private int _transactionDepth;
@@ -87,11 +87,6 @@ namespace SQLite.Net
         ///     Blob serializer to use for storing undefined and complex data structures. If left null
         ///     these types will thrown an exception as usual.
         /// </param>
-        /// <param name="tableMappings">
-        ///     Exisiting table mapping that the connection can use. If its null, it creates the mappings,
-        ///     if and when required. The mappings are also created when an unknown type is used for the first
-        ///     time.
-        /// </param>
         /// <param name="extraTypeMappings">
         ///     Any extra type mappings that you wish to use for overriding the default for creating
         ///     column definitions for SQLite DDL in the class Orm (snake in Swedish).
@@ -99,12 +94,13 @@ namespace SQLite.Net
         /// <param name="resolver">
         ///     A contract resovler for resolving interfaces to concreate types during object creation
         /// </param>
+        /// 
         [PublicAPI]
         public SQLiteConnection([JetBrains.Annotations.NotNull] ISQLitePlatform sqlitePlatform, [JetBrains.Annotations.NotNull] string databasePath,
-            bool storeDateTimeAsTicks = true, [CanBeNull] IBlobSerializer serializer = null, [CanBeNull] IDictionary<string, TableMapping> tableMappings = null,
-            [CanBeNull] IDictionary<Type, string> extraTypeMappings = null, [CanBeNull] IContractResolver resolver = null)
+            bool storeDateTimeAsTicks = true, [CanBeNull] IBlobSerializer serializer = null, [CanBeNull] IDictionary<Type, string> extraTypeMappings = null,
+            [CanBeNull] IContractResolver resolver = null)
             : this(sqlitePlatform, databasePath, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create, storeDateTimeAsTicks,
-                serializer, tableMappings, extraTypeMappings, resolver)
+                serializer, extraTypeMappings, resolver)
         {
         }
 
@@ -126,11 +122,6 @@ namespace SQLite.Net
         ///     Blob serializer to use for storing undefined and complex data structures. If left null
         ///     these types will thrown an exception as usual.
         /// </param>
-        /// <param name="tableMappings">
-        ///     Exisiting table mapping that the connection can use. If its null, it creates the mappings,
-        ///     if and when required. The mappings are also created when an unknown type is used for the first
-        ///     time.
-        /// </param>
         /// <param name="extraTypeMappings">
         ///     Any extra type mappings that you wish to use for overriding the default for creating
         ///     column definitions for SQLite DDL in the class Orm (snake in Swedish).
@@ -138,10 +129,11 @@ namespace SQLite.Net
         /// <param name="resolver">
         ///     A contract resovler for resolving interfaces to concreate types during object creation
         /// </param>
+        /// 
         [PublicAPI]
         public SQLiteConnection([JetBrains.Annotations.NotNull] ISQLitePlatform sqlitePlatform, string databasePath, SQLiteOpenFlags openFlags,
-            bool storeDateTimeAsTicks = true, [CanBeNull] IBlobSerializer serializer = null, [CanBeNull] IDictionary<string, TableMapping> tableMappings = null,
-            [CanBeNull] IDictionary<Type, string> extraTypeMappings = null, IContractResolver resolver = null)
+            bool storeDateTimeAsTicks = true, [CanBeNull] IBlobSerializer serializer = null, [CanBeNull] IDictionary<Type, string> extraTypeMappings = null,
+            IContractResolver resolver = null)
         {
             if (sqlitePlatform == null)
             {
@@ -152,7 +144,6 @@ namespace SQLite.Net
             Platform = sqlitePlatform;
             Resolver = resolver ?? ContractResolver.Current;
 
-            _tableMappings = tableMappings ?? new Dictionary<string, TableMapping>();
 			_tableMappingsLocks = new object();
 
             if (string.IsNullOrEmpty(databasePath))
@@ -185,18 +176,6 @@ namespace SQLite.Net
 
             BusyTimeout = TimeSpan.FromSeconds(0.1);
         }
-
-		private IColumnInformationProvider _columnInformationProvider;
-		[CanBeNull, PublicAPI]
-		public IColumnInformationProvider ColumnInformationProvider 
-		{
-			get { return _columnInformationProvider; }
-			set
-			{
-				_columnInformationProvider = value;
-				Orm.ColumnInformationProvider = _columnInformationProvider ?? new DefaultColumnInformationProvider ();
-			}
-		}
 
         [CanBeNull, PublicAPI]
         public IBlobSerializer Serializer { get; private set; }
@@ -242,23 +221,6 @@ namespace SQLite.Net
         }
 
         /// <summary>
-        ///     Returns the mappings from types to tables that the connection
-        ///     currently understands.
-        /// </summary>
-        [PublicAPI]
-        [JetBrains.Annotations.NotNull]
-        public IEnumerable<TableMapping> TableMappings
-        {
-            get
-			{
-				lock (_tableMappingsLocks)
-				{
-					return _tableMappings.Values.ToList();
-				}
-			}
-        }
-
-        /// <summary>
         ///     Whether <see cref="BeginTransaction" /> has been called and the database is waiting for a <see cref="Commit" />.
         /// </summary>
         [PublicAPI]
@@ -296,73 +258,6 @@ namespace SQLite.Net
             Encoding.UTF8.GetBytes(s, 0, s.Length, bytes, 0);
             return bytes;
         }
-
-        /// <summary>
-        ///     Retrieves the mapping that is automatically generated for the given type.
-        /// </summary>
-        /// <param name="type">
-        ///     The type whose mapping to the database is returned.
-        /// </param>
-        /// <param name="createFlags">
-        ///     Optional flags allowing implicit PK and indexes based on naming conventions
-        /// </param>
-        /// <returns>
-        ///     The mapping represents the schema of the columns of the database and contains
-        ///     methods to set and get properties of objects.
-        /// </returns>
-        [PublicAPI]
-        public TableMapping GetMapping(Type type, CreateFlags createFlags = CreateFlags.None)
-        {
-			lock (_tableMappingsLocks)
-			{
-				TableMapping map;
-				return _tableMappings.TryGetValue(type.FullName, out map) ? map : CreateAndSetMapping(type, createFlags, _tableMappings);
-			}
-        }
-
-        private TableMapping CreateAndSetMapping(Type type, CreateFlags createFlags, IDictionary<string, TableMapping> mapTable)
-        {
-            var props = Platform.ReflectionService.GetPublicInstanceProperties(type);
-			var map = new TableMapping(type, props, createFlags, _columnInformationProvider);
-            mapTable[type.FullName] = map;
-        	return map;
-        }
-
-        /// <summary>
-        ///     Retrieves the mapping that is automatically generated for the given type.
-        /// </summary>
-        /// <returns>
-        ///     The mapping represents the schema of the columns of the database and contains
-        ///     methods to set and get properties of objects.
-        /// </returns>
-        [PublicAPI]
-        public TableMapping GetMapping<T>()
-        {
-            return GetMapping(typeof (T));
-        }
-
-        /// <summary>
-        ///     Executes a "drop table" on the database.  This is non-recoverable.
-        /// </summary>
-        [PublicAPI]
-        public int DropTable<T>()
-        {
-            return DropTable(typeof (T));
-        }
-
-        /// <summary>
-        ///     Executes a "drop table" on the database.  This is non-recoverable.
-        /// </summary>
-        [PublicAPI]
-        public int DropTable(Type t)
-        {
-            var map = GetMapping(t);
-
-            var query = string.Format("drop table if exists \"{0}\"", map.TableName);
-
-            return Execute(query);
-        }
-
 
         /// <summary>
         ///     Creates an index for the specified table and columns.
@@ -416,42 +311,6 @@ namespace SQLite.Net
             return CreateIndex(tableName + "_" + string.Join("_", columnNames), tableName, columnNames, unique);
         }
 
-        /// <summary>
-        ///     Creates an index for the specified object property.
-        ///     e.g. CreateIndex{Client}(c => c.Name);
-        /// </summary>
-        /// <typeparam name="T">Type to reflect to a database table.</typeparam>
-        /// <param name="property">Property to index</param>
-        /// <param name="unique">Whether the index should be unique</param>
-        [PublicAPI]
-        public void CreateIndex<T>(Expression<Func<T, object>> property, bool unique = false)
-        {
-            MemberExpression mx;
-            if (property.Body.NodeType == ExpressionType.Convert)
-            {
-                mx = ((UnaryExpression) property.Body).Operand as MemberExpression;
-            }
-            else
-            {
-                mx = (property.Body as MemberExpression);
-            }
-            if (mx == null)
-            {
-                throw new ArgumentException("Expression is not supported", "property");
-            }
-            var propertyInfo = mx.Member as PropertyInfo;
-            if (propertyInfo == null)
-            {
-                throw new ArgumentException("The lambda expression 'property' should point to a valid Property");
-            }
-
-            var propName = propertyInfo.Name;
-
-            var map = GetMapping<T>();
-            var colName = map.FindColumnWithPropertyName(propName).Name;
-
-            CreateIndex(map.TableName, colName, unique);
-        }
 
 
 
@@ -540,49 +399,6 @@ namespace SQLite.Net
             return r;
         }
 
-
-        /// <summary>
-        ///     Creates a SQLiteCommand given the command text (SQL) with arguments. Place a '?'
-        ///     in the command text for each of the arguments and then executes that command.
-        ///     It returns each row of the result using the mapping automatically generated for
-        ///     the given type.
-        /// </summary>
-        /// <param name="query">
-        ///     The fully escaped SQL.
-        /// </param>
-        /// <param name="args">
-        ///     Arguments to substitute for the occurences of '?' in the query.
-        /// </param>
-        /// <returns>
-        ///     An enumerable with one result for each row returned by the query.
-
-        /// <summary>
-        ///     Creates a SQLiteCommand given the command text (SQL) with arguments. Place a '?'
-        ///     in the command text for each of the arguments and then executes that command.
-
-        /// <summary>
-        ///     Creates a SQLiteCommand given the command text (SQL) with arguments. Place a '?'
-        ///     in the command text for each of the arguments and then executes that command.
-        ///     It returns each row of the result using the specified mapping. This function is
-        ///     only used by libraries in order to query the database via introspection. It is
-        ///     normally not used.
-        /// </summary>
-        /// <param name="map">
-        ///     A <see cref="TableMapping" /> to use to convert the resulting rows
-        ///     into objects.
-        /// </param>
-        /// <param name="query">
-        ///     The fully escaped SQL.
-        /// </param>
-        /// <param name="args">
-        ///     Arguments to substitute for the occurences of '?' in the query.
-        /// </param>
-        /// <returns>
-        ///     An enumerable with one result for each row returned by the query.
-
-        /// <summary>
-
-        /// <summary>
 
 
 
@@ -828,583 +644,6 @@ namespace SQLite.Net
             }
         }
 
-        /// <summary>
-        ///     Inserts all specified objects.
-        /// </summary>
-        /// <param name="objects">
-        ///     An <see cref="IEnumerable" /> of the objects to insert.
-        /// </param>
-        /// <param name="runInTransaction">A boolean indicating if the inserts should be wrapped in a transaction.</param>
-        /// <returns>
-        ///     The number of rows added to the table.
-        /// </returns>
-        [PublicAPI]
-        public int InsertAll(IEnumerable objects, bool runInTransaction = true)
-        {
-            var c = 0;
-            if (runInTransaction)
-            {
-                RunInTransaction(() =>
-                {
-                    foreach (var r in objects)
-                    {
-                        c += Insert(r);
-                    }
-                });
-            }
-            else
-            {
-                foreach (var r in objects)
-                {
-                    c += Insert(r);
-                }
-            }
-            return c;
-        }
-
-        /// <summary>
-        ///     Inserts all specified objects.
-        /// </summary>
-        /// <param name="objects">
-        ///     An <see cref="IEnumerable" /> of the objects to insert.
-        /// </param>
-        /// <param name="extra">
-        ///     Literal SQL code that gets placed into the command. INSERT {extra} INTO ...
-        /// </param>
-        /// <param name="runInTransaction">A boolean indicating if the inserts should be wrapped in a transaction.</param>
-        /// <returns>
-        ///     The number of rows added to the table.
-        /// </returns>
-        [PublicAPI]
-        public int InsertAll(IEnumerable objects, string extra, bool runInTransaction = true)
-        {
-            var c = 0;
-            if (runInTransaction)
-            {
-                RunInTransaction(() =>
-                {
-                    foreach (var r in objects)
-                    {
-                        c += Insert(r, extra);
-                    }
-                });
-            }
-            else
-            {
-                foreach (var r in objects)
-                {
-                    c += Insert(r, extra);
-                }
-            }
-            return c;
-        }
-
-        /// <summary>
-        ///     Inserts all specified objects.
-        /// </summary>
-        /// <param name="objects">
-        ///     An <see cref="IEnumerable" /> of the objects to insert.
-        /// </param>
-        /// <param name="objType">
-        ///     The type of object to insert.
-        /// </param>
-        /// <param name="runInTransaction">A boolean indicating if the inserts should be wrapped in a transaction.</param>
-        /// <returns>
-        ///     The number of rows added to the table.
-        /// </returns>
-        [PublicAPI]
-        public int InsertAll(IEnumerable objects, Type objType, bool runInTransaction = true)
-        {
-            var c = 0;
-            if (runInTransaction)
-            {
-                RunInTransaction(() =>
-                {
-                    foreach (var r in objects)
-                    {
-                        c += Insert(r, objType);
-                    }
-                });
-            }
-            else
-            {
-                foreach (var r in objects)
-                {
-                    c += Insert(r, objType);
-                }
-            }
-            return c;
-        }
-
-        [PublicAPI]
-        public int InsertOrIgnoreAll (IEnumerable objects)
-        {
-            return InsertAll (objects, "OR IGNORE");
-        }
-
-        [PublicAPI]
-        public int InsertOrIgnore (object obj)
-        {
-            if (obj == null) {
-                return 0;
-            }
-            return Insert (obj, "OR IGNORE", obj.GetType ());
-        }
-
-        [PublicAPI]
-        public int InsertOrIgnore (object obj, Type objType)
-        {
-            return Insert (obj, "OR IGNORE", objType);
-        }
-
-        /// <summary>
-        ///     Inserts the given object and retrieves its
-        ///     auto incremented primary key if it has one.
-        /// </summary>
-        /// <param name="obj">
-        ///     The object to insert.
-        /// </param>
-        /// <returns>
-        ///     The number of rows added to the table.
-        /// </returns>
-        [PublicAPI]
-        public int Insert(object obj)
-        {
-            if (obj == null)
-            {
-                return 0;
-            }
-            return Insert(obj, "", obj.GetType());
-        }
-
-        /// <summary>
-        ///     Inserts the given object and retrieves its
-        ///     auto incremented primary key if it has one.
-        ///     If a UNIQUE constraint violation occurs with
-        ///     some pre-existing object, this function deletes
-        ///     the old object.
-        /// </summary>
-        /// <param name="obj">
-        ///     The object to insert.
-        /// </param>
-        /// <returns>
-        ///     The number of rows modified.
-        /// </returns>
-        [PublicAPI]
-        public int InsertOrReplace(object obj)
-        {
-            if (obj == null)
-            {
-                return 0;
-            }
-            return Insert(obj, "OR REPLACE", obj.GetType());
-        }
-
-        /// <summary>
-        ///     Inserts all specified objects.
-        ///     For each insertion, if a UNIQUE
-        ///     constraint violation occurs with
-        ///     some pre-existing object, this function
-        ///     deletes the old object.
-        /// </summary>
-        /// <param name="objects">
-        ///     An <see cref="IEnumerable" /> of the objects to insert or replace.
-        /// </param>
-        /// <returns>
-        ///     The total number of rows modified.
-        /// </returns>
-        [PublicAPI]
-        public int InsertOrReplaceAll(IEnumerable objects)
-        {
-            var c = 0;
-            RunInTransaction(() =>
-            {
-                foreach (var r in objects)
-                {
-                    c += InsertOrReplace(r);
-                }
-            });
-            return c;
-        }
-
-        /// <summary>
-        ///     Inserts the given object and retrieves its
-        ///     auto incremented primary key if it has one.
-        /// </summary>
-        /// <param name="obj">
-        ///     The object to insert.
-        /// </param>
-        /// <param name="objType">
-        ///     The type of object to insert.
-        /// </param>
-        /// <returns>
-        ///     The number of rows added to the table.
-        /// </returns>
-        [PublicAPI]
-        public int Insert(object obj, Type objType)
-        {
-            return Insert(obj, "", objType);
-        }
-
-        /// <summary>
-        ///     Inserts the given object and retrieves its
-        ///     auto incremented primary key if it has one.
-        ///     If a UNIQUE constraint violation occurs with
-        ///     some pre-existing object, this function deletes
-        ///     the old object.
-        /// </summary>
-        /// <param name="obj">
-        ///     The object to insert.
-        /// </param>
-        /// <param name="objType">
-        ///     The type of object to insert.
-        /// </param>
-        /// <returns>
-        ///     The number of rows modified.
-        /// </returns>
-        [PublicAPI]
-        public int InsertOrReplace(object obj, Type objType)
-        {
-            return Insert(obj, "OR REPLACE", objType);
-        }
-
-        /// <summary>
-        ///     Inserts all specified objects.
-        ///     For each insertion, if a UNIQUE
-        ///     constraint violation occurs with
-        ///     some pre-existing object, this function
-        ///     deletes the old object.
-        /// </summary>
-        /// <param name="objects">
-        ///     An <see cref="IEnumerable" /> of the objects to insert or replace.
-        /// </param>
-        /// <param name="objType">
-        ///     The type of objects to insert or replace.
-        /// </param>
-        /// <returns>
-        ///     The total number of rows modified.
-        /// </returns>
-        [PublicAPI]
-        public int InsertOrReplaceAll(IEnumerable objects, Type objType)
-        {
-            var c = 0;
-            RunInTransaction(() =>
-            {
-                foreach (var r in objects)
-                {
-                    c += InsertOrReplace(r, objType);
-                }
-            });
-            return c;
-        }
-
-        /// <summary>
-        ///     Inserts the given object and retrieves its
-        ///     auto incremented primary key if it has one.
-        /// </summary>
-        /// <param name="obj">
-        ///     The object to insert.
-        /// </param>
-        /// <param name="extra">
-        ///     Literal SQL code that gets placed into the command. INSERT {extra} INTO ...
-        /// </param>
-        /// <returns>
-        ///     The number of rows added to the table.
-        /// </returns>
-        [PublicAPI]
-        public int Insert(object obj, string extra)
-        {
-            if (obj == null)
-            {
-                return 0;
-            }
-            return Insert(obj, extra, obj.GetType());
-        }
-
-        /// <summary>
-        ///     Inserts the given object and retrieves its
-        ///     auto incremented primary key if it has one.
-        /// </summary>
-        /// <param name="obj">
-        ///     The object to insert.
-        /// </param>
-        /// <param name="extra">
-        ///     Literal SQL code that gets placed into the command. INSERT {extra} INTO ...
-        /// </param>
-        /// <param name="objType">
-        ///     The type of object to insert.
-        /// </param>
-        /// <returns>
-        ///     The number of rows added to the table.
-        /// </returns>
-        [PublicAPI]
-        public int Insert(object obj, string extra, Type objType)
-        {
-            if (obj == null || objType == null)
-            {
-                return 0;
-            }
-
-            var map = GetMapping(objType);
-
-            if (map.PK != null && map.PK.IsAutoGuid)
-            {
-                var prop = objType.GetRuntimeProperty(map.PK.PropertyName);
-                if (prop != null)
-                {
-                    if (prop.GetValue(obj, null).Equals(Guid.Empty))
-                    {
-                        prop.SetValue(obj, Guid.NewGuid(), null);
-                    }
-                }
-            }
-
-            var replacing = string.Compare(extra, "OR REPLACE", StringComparison.OrdinalIgnoreCase) == 0;
-
-            var cols = replacing ? map.Columns : map.InsertColumns;
-            var vals = new object[cols.Length];
-            for (var i = 0; i < vals.Length; i++)
-            {
-                vals[i] = cols[i].GetValue(obj);
-            }
-
-            var insertCmd = GetInsertCommand(map, extra);
-            int count;
-            try
-            {
-                count = insertCmd.ExecuteNonQuery(vals);
-            }
-            catch (SQLiteException ex)
-            {
-                if (Platform.SQLiteApi.ExtendedErrCode(Handle) == ExtendedResult.ConstraintNotNull)
-                {
-                    throw NotNullConstraintViolationException.New(ex.Result, ex.Message, map, obj);
-                }
-                throw;
-            }
-
-            if (map.HasAutoIncPK)
-            {
-                var id = Platform.SQLiteApi.LastInsertRowid(Handle);
-                map.SetAutoIncPK(obj, id);
-            }
-
-            return count;
-        }
-
-        private PreparedSqlLiteInsertCommand GetInsertCommand(TableMapping map, string extra)
-        {
-            ActiveInsertCommand cmd;
-            if (_insertCommandCache == null)
-            {
-                _insertCommandCache = new Dictionary<TableMapping, ActiveInsertCommand>();
-            }
-
-            if (!_insertCommandCache.TryGetValue(map, out cmd))
-            {
-                cmd = new ActiveInsertCommand(map);
-                _insertCommandCache[map] = cmd;
-            }
-
-            return cmd.GetCommand(this, extra);
-        }
-
-        /// <summary>
-        ///     Updates all of the columns of a table using the specified object
-        ///     except for its primary key.
-        ///     The object is required to have a primary key.
-        /// </summary>
-        /// <param name="obj">
-        ///     The object to update. It must have a primary key designated using the PrimaryKeyAttribute.
-        /// </param>
-        /// <returns>
-        ///     The number of rows updated.
-        /// </returns>
-        [PublicAPI]
-        public int Update(object obj)
-        {
-            if (obj == null)
-            {
-                return 0;
-            }
-            return Update(obj, obj.GetType());
-        }
-
-        /// <summary>
-        ///     Updates all of the columns of a table using the specified object
-        ///     except for its primary key.
-        ///     The object is required to have a primary key.
-        /// </summary>
-        /// <param name="obj">
-        ///     The object to update. It must have a primary key designated using the PrimaryKeyAttribute.
-        /// </param>
-        /// <param name="objType">
-        ///     The type of object to insert.
-        /// </param>
-        /// <returns>
-        ///     The number of rows updated.
-        /// </returns>
-        [PublicAPI]
-        public int Update(object obj, Type objType)
-        {
-            int rowsAffected;
-            if (obj == null || objType == null)
-            {
-                return 0;
-            }
-
-            var map = GetMapping(objType);
-
-            var pk = map.PK;
-
-            if (pk == null)
-            {
-                throw new NotSupportedException("Cannot update " + map.TableName + ": it has no PK");
-            }
-
-            var cols = from p in map.Columns
-                where p != pk
-                select p;
-            var vals = from c in cols
-                select c.GetValue(obj);
-            var ps = new List<object>(vals)
-            {
-                pk.GetValue(obj)
-            };
-            var q = string.Format("update \"{0}\" set {1} where {2} = ? ", map.TableName,
-                string.Join(",", (from c in cols
-                    select "\"" + c.Name + "\" = ? ").ToArray()), pk.Name);
-            try
-            {
-                rowsAffected = Execute(q, ps.ToArray());
-            }
-            catch (SQLiteException ex)
-            {
-                if (ex.Result == Result.Constraint && Platform.SQLiteApi.ExtendedErrCode(Handle) == ExtendedResult.ConstraintNotNull)
-                {
-                    throw NotNullConstraintViolationException.New(ex, map, obj);
-                }
-
-                throw;
-            }
-
-            return rowsAffected;
-        }
-
-        /// <summary>
-        ///     Updates all specified objects.
-        /// </summary>
-        /// <param name="objects">
-        ///     An <see cref="IEnumerable" /> of the objects to insert.
-        /// </param>
-        /// <param name="runInTransaction">A boolean indicating if the inserts should be wrapped in a transaction.</param>
-        /// <returns>
-        ///     The number of rows modified.
-        /// </returns>
-        [PublicAPI]
-        public int UpdateAll(IEnumerable objects, bool runInTransaction = true)
-        {
-            var c = 0;
-            if (runInTransaction)
-            {
-                RunInTransaction(() =>
-                {
-                    foreach (var r in objects)
-                    {
-                        c += Update(r);
-                    }
-                });
-            }
-            else
-            {
-                foreach (var r in objects)
-                {
-                    c += Update(r);
-                }
-            }
-            return c;
-        }
-
-        /// <summary>
-        ///     Deletes the given object from the database using its primary key.
-        /// </summary>
-        /// <param name="objectToDelete">
-        ///     The object to delete. It must have a primary key designated using the PrimaryKeyAttribute.
-        /// </param>
-        /// <returns>
-        ///     The number of rows deleted.
-        /// </returns>
-        [PublicAPI]
-        public int Delete(object objectToDelete)
-        {
-            var map = GetMapping(objectToDelete.GetType());
-            var pk = map.PK;
-            if (pk == null)
-            {
-                throw new NotSupportedException("Cannot delete " + map.TableName + ": it has no PK");
-            }
-            var q = string.Format("delete from \"{0}\" where \"{1}\" = ?", map.TableName, pk.Name);
-            return Execute(q, pk.GetValue(objectToDelete));
-        }
-
-        /// <summary>
-        ///     Deletes the object with the specified primary key.
-        /// </summary>
-        /// <param name="primaryKey">
-        ///     The primary key of the object to delete.
-        /// </param>
-        /// <returns>
-        ///     The number of objects deleted.
-        /// </returns>
-        /// <typeparam name='T'>
-        ///     The type of object.
-        /// </typeparam>
-        [PublicAPI]
-        public int Delete<T>(object primaryKey)
-        {
-            var map = GetMapping(typeof (T));
-            var pk = map.PK;
-            if (pk == null)
-            {
-                throw new NotSupportedException("Cannot delete " + map.TableName + ": it has no PK");
-            }
-            var q = string.Format("delete from \"{0}\" where \"{1}\" = ?", map.TableName, pk.Name);
-            return Execute(q, primaryKey);
-        }
-
-        /// <summary>
-        ///     Deletes all the objects from the specified table.
-        ///     WARNING WARNING: Let me repeat. It deletes ALL the objects from the
-        ///     specified table. Do you really want to do that?
-        /// </summary>
-        /// <returns>
-        ///     The number of objects deleted.
-        /// </returns>
-        /// <typeparam name='T'>
-        ///     The type of objects to delete.
-        /// </typeparam>
-        [PublicAPI]
-        public int DeleteAll<T>()
-        {
-            return DeleteAll(typeof (T));
-        }
-
-        /// <summary>
-        ///     Deletes all the objects from the specified table.
-        ///     WARNING WARNING: Let me repeat. It deletes ALL the objects from the
-        ///     specified table. Do you really want to do that?
-        /// </summary>
-        /// <returns>
-        ///     The number of objects deleted.
-        /// </returns>
-        [PublicAPI]
-        public int DeleteAll(Type t)
-        {
-            var map = GetMapping(t);
-            var query = string.Format("delete from \"{0}\"", map.TableName);
-            return Execute(query);
-        }
-
         #region Backup
 
         public string CreateDatabaseBackup(ISQLitePlatform platform)
@@ -1490,13 +729,6 @@ namespace SQLite.Net
             {
                 try
                 {
-                    if (_insertCommandCache != null)
-                    {
-                        foreach (var sqlInsertCommand in _insertCommandCache.Values)
-                        {
-                            sqlInsertCommand.Dispose();
-                        }
-                    }
                     var r = Platform.SQLiteApi.Close(Handle);
                     if (r != Result.OK)
                     {
@@ -1537,18 +769,5 @@ namespace SQLite.Net
             }
         }
 
-        //private struct IndexInfo
-        //{
-        //    public List<IndexedColumn> Columns;
-        //    public string IndexName;
-        //    public string TableName;
-        //    public bool Unique;
-        //}
-
-        //private struct IndexedColumn
-        //{
-        //    public string ColumnName;
-        //    public int Order;
-        //}
     }
 }

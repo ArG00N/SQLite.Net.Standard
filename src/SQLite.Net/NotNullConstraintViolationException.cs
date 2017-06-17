@@ -30,33 +30,25 @@ namespace SQLite.Net
     [PublicAPI]
     public class NotNullConstraintViolationException : SQLiteException
     {
-        protected NotNullConstraintViolationException(Result r, string message, TableMapping mapping = null, object obj = null)
+        protected NotNullConstraintViolationException(Result r, string message, object obj = null)
             : base(r, message)
         {
-            if (mapping != null && obj != null)
-            {
-                Columns = from c in mapping.Columns
-                    where c.IsNullable == false && c.GetValue(obj) == null
-                    select c;
-            }
-        }
 
-        [PublicAPI]
-        public IEnumerable<TableMapping.Column> Columns { get; protected set; }
+        }
 
         internal new static NotNullConstraintViolationException New(Result r, string message)
         {
             return new NotNullConstraintViolationException(r, message);
         }
 
-        internal static NotNullConstraintViolationException New(Result r, string message, TableMapping mapping, object obj)
+        internal static NotNullConstraintViolationException New(Result r, string message, object obj)
         {
-            return new NotNullConstraintViolationException(r, message, mapping, obj);
+            return new NotNullConstraintViolationException(r, message, obj);
         }
 
-        internal static NotNullConstraintViolationException New(SQLiteException exception, TableMapping mapping, object obj)
+        internal static NotNullConstraintViolationException New(SQLiteException exception, object obj)
         {
-            return new NotNullConstraintViolationException(exception.Result, exception.Message, mapping, obj);
+            return new NotNullConstraintViolationException(exception.Result, exception.Message, obj);
         }
     }
 }
