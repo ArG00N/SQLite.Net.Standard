@@ -105,8 +105,6 @@ namespace SQLite.Net
             Platform = sqlitePlatform ?? throw new ArgumentNullException(nameof(sqlitePlatform));
             Resolver = resolver ?? ContractResolver.Current;
 
-            new object();
-
             if (string.IsNullOrEmpty(databasePath))
             {
                 throw new ArgumentException("Must be specified", nameof(databasePath));

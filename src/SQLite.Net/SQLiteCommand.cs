@@ -208,7 +208,7 @@ namespace SQLite.Net
             }
         }
 
-        internal static void BindParameter(ISQLiteApi isqLite3Api, IDbStatement stmt, int index, object value, bool storeDateTimeAsTicks,
+        private static void BindParameter(ISQLiteApi isqLite3Api, IDbStatement stmt, int index, object value, bool storeDateTimeAsTicks,
             IBlobSerializer serializer)
         {
             if (value == null)
