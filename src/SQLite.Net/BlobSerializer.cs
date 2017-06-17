@@ -2,25 +2,25 @@
 
 namespace SQLite.Net
 {
+    public delegate bool CanSerializeAction(Type type);
+
+    public delegate object DeserializeAction(byte[] data, Type type);
+
+    public delegate byte[] SerializeAction(object obj);
+
     public class BlobSerializer : IBlobSerializer
     {
-        public delegate bool CanSerializeDelegate(Type type);
+        private readonly CanSerializeAction _canDeserializeAction;
+        private readonly DeserializeAction _deserializeAction;
+        private readonly SerializeAction _serializeAction;
 
-        public delegate object DeserializeDelegate(byte[] data, Type type);
-
-        public delegate byte[] SerializeDelegate(object obj);
-
-        private readonly CanSerializeDelegate _canDeserializeDelegate;
-        private readonly DeserializeDelegate _deserializeDelegate;
-        private readonly SerializeDelegate _serializeDelegate;
-
-        public BlobSerializer(SerializeDelegate serializeDelegate,
-            DeserializeDelegate deserializeDelegate,
-            CanSerializeDelegate canDeserializeDelegate)
+        public BlobSerializer(SerializeAction serializeAction,
+            DeserializeAction deserializeAction,
+            CanSerializeAction canDeserializeAction)
         {
-            _serializeDelegate = serializeDelegate;
-            _deserializeDelegate = deserializeDelegate;
-            _canDeserializeDelegate = canDeserializeDelegate;
+            _serializeAction = serializeAction;
+            _deserializeAction = deserializeAction;
+            _canDeserializeAction = canDeserializeAction;
         }
 
         #region IBlobSerializer implementation
@@ -28,19 +28,19 @@ namespace SQLite.Net
         
         public byte[] Serialize<T>(T obj)
         {
-            return _serializeDelegate(obj);
+            return _serializeAction(obj);
         }
 
         
         public object Deserialize(byte[] data, Type type)
         {
-            return _deserializeDelegate(data, type);
+            return _deserializeAction(data, type);
         }
 
         
         public bool CanDeserialize(Type type)
         {
-            return _canDeserializeDelegate(type);
+            return _canDeserializeAction(type);
         }
 
         #endregion

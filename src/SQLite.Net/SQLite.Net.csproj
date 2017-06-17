@@ -166,6 +166,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Interop\CreateFlags.cs" />
     <Compile Include="ReflectionService.cs" />
+    <Compile Include="SQLiteDataTable.cs" />
+    <Compile Include="SQLiteDataTableRow.cs" />
     <Compile Include="SQLiteException.cs" />
     <Compile Include="SQLiteCommand.cs" />
     <Compile Include="SQLiteConnection.cs" />

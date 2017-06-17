@@ -551,6 +551,11 @@ namespace SQLite.Net
 
         public string CreateDatabaseBackup(ISQLitePlatform platform)
         {
+            if (platform == null)
+            {
+                throw new ArgumentNullException(nameof(platform));
+            }
+
             var sqliteApi = platform.SQLiteApi as ISQLiteApiExt;
 
             if (sqliteApi == null)
@@ -619,7 +624,7 @@ namespace SQLite.Net
         }
 
 
-        protected void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
             Close();
         }

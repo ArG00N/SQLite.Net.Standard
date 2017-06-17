@@ -91,7 +91,7 @@ namespace SQLite.Net
 
                 while (_sqlitePlatform.SQLiteApi.Step(stmt) == Result.Row)
                 {
-                    var rowList = new Dictionary<string, object>();
+                    var rowList = new SQLiteDataTableRow();
 
                     for (var i = 0; i < columnCount; i++)
                     {
