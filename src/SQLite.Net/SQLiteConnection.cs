@@ -108,7 +108,7 @@ namespace SQLite.Net
         ///     A contract resovler for resolving interfaces to concreate types during object creation
         /// </param>
         /// 
-        private SQLiteConnection( ISQLitePlatform sqlitePlatform, string databasePath, SQLiteOpenFlags openFlags,
+        private SQLiteConnection(ISQLitePlatform sqlitePlatform, string databasePath, SQLiteOpenFlags openFlags,
             bool storeDateTimeAsTicks = true, IBlobSerializer serializer = null, IDictionary<Type, string> extraTypeMappings = null,
             IContractResolver resolver = null)
         {
@@ -236,6 +236,11 @@ namespace SQLite.Net
 
         public SQLiteCommand CreateCommand(string cmdText, params object[] args)
         {
+            if (args == null)
+            {
+                throw new ArgumentException(nameof(args));
+            }
+
             if (!_open)
             {
                 throw SQLiteException.New(Result.Error, "Cannot create commands from unopened database");
@@ -320,8 +325,7 @@ namespace SQLite.Net
                 }
                 catch (Exception ex)
                 {
-                    var sqlExp = ex as SQLiteException;
-                    if (sqlExp != null)
+                    if (ex is SQLiteException sqlExp)
                     {
                         // It is recommended that applications respond to the errors listed below 
                         //    by explicitly issuing a ROLLBACK command.
@@ -374,8 +378,7 @@ namespace SQLite.Net
             }
             catch (Exception ex)
             {
-                var sqlExp = ex as SQLiteException;
-                if (sqlExp != null)
+                if (ex is SQLiteException sqlExp)
                 {
                     // It is recommended that applications respond to the errors listed below 
                     //    by explicitly issuing a ROLLBACK command.
@@ -526,6 +529,11 @@ namespace SQLite.Net
 
         public void RunInTransaction(Action action)
         {
+            if (action == null)
+            {
+                throw new ArgumentNullException(nameof(action));
+            }
+
             try
             {
                 var savePoint = SaveTransactionPoint();

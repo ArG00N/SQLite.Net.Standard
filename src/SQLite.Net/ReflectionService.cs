@@ -20,6 +20,11 @@ namespace SQLite.Net
 
         public object GetMemberValue(object obj, Expression expr, MemberInfo member)
         {
+            if (member == null)
+            {
+                throw new ArgumentException(nameof(member));
+            }
+
             if (member is PropertyInfo)
             {
                 var m = (PropertyInfo)member;

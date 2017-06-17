@@ -203,6 +203,11 @@ namespace SQLite.Net.Platform.WinRT
 
         public IDbStatement Prepare2(IDbHandle db, string query)
         {
+            if (query == null)
+            {
+                throw new ArgumentException(nameof(query));
+            }
+
             var dbHandle = (DbHandle)db;
             var r = SQLite3.Prepare2(dbHandle.InternalDbHandle, query, query.Length, out Sqlite3DatabaseHandle stmt, IntPtr.Zero);
             if (r != Result.OK)
