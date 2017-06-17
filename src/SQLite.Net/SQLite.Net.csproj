@@ -148,6 +148,7 @@
     <Compile Include="Interop\IDbStatement.cs" />
     <Compile Include="IBlobSerializer.cs" />
     <Compile Include="NotNullConstraintViolationException.cs" />
+    <Compile Include="Platforms\SQLite3UWP.cs" />
     <Compile Include="Platforms\SQLiteApiAndroid.cs" />
     <Compile Include="Platforms\SQLiteApiAndroidInternal.cs" />
     <Compile Include="Platforms\SQLiteApiGeneric.cs" />
