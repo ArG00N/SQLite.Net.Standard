@@ -1,5 +1,4 @@
 ﻿using SQLite.Net.Interop;
-using SQLite.Net.Platform.WinRT;
 
 namespace SQLite.Net.Platform.XamarinAndroid
 {

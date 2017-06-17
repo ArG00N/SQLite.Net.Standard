@@ -24,7 +24,6 @@
 using System;
 using JetBrains.Annotations;
 using SQLite.Net.Interop;
-using System.Diagnostics;
 
 namespace SQLite.Net
 {

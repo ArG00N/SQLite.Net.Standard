@@ -1,8 +1,6 @@
 using System;
-using System.IO;
 using System.Runtime.InteropServices;
 using SQLite.Net.Interop;
-using System.Reflection;
 
 namespace SQLite.Net.Platform.OSX
 {

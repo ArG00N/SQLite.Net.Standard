@@ -1,7 +1,6 @@
 ﻿using System;
 using SQLite.Net.Interop;
 using System.Runtime.InteropServices;
-using System.Text;
 using Sqlite3DatabaseHandle = System.IntPtr;
 using Sqlite3Statement = System.IntPtr;
 
