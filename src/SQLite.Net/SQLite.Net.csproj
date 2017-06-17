@@ -131,7 +131,6 @@
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Annotations\JetBrains.cs" />
-    <Compile Include="Attributes\NotNullAttribute.cs" />
     <Compile Include="BlobSerializerDelegate.cs" />
     <Compile Include="ContractResolver.cs" />
     <Compile Include="IContractResolver.cs" />
@@ -166,10 +165,6 @@
     <Compile Include="Platforms\SQLitePlatformWinRT.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Interop\CreateFlags.cs" />
-    <Compile Include="Attributes\IgnoreAttribute.cs" />
-    <Compile Include="Attributes\IndexedAttribute.cs" />
-    <Compile Include="Attributes\MaxLengthAttribute.cs" />
-    <Compile Include="Attributes\PrimaryKeyAttribute.cs" />
     <Compile Include="ReflectionService.cs" />
     <Compile Include="SQLiteException.cs" />
     <Compile Include="SQLiteCommand.cs" />
@@ -180,14 +175,11 @@
     <Compile Include="SQLiteCommandResult.cs" />
     <Compile Include="StopwatchFactory.cs" />
     <Compile Include="Interop\SQLiteOpenFlags.cs" />
-    <Compile Include="Attributes\TableAttribute.cs" />
-    <Compile Include="Attributes\UniqueAttribute.cs" />
     <Compile Include="ITraceListener.cs" />
     <Compile Include="TraceListenerExtensions.cs" />
     <Compile Include="DebugTraceListener.cs" />
     <Compile Include="ISerializable.cs" />
     <Compile Include="Interop\IDbBackupHandle.cs" />
-    <Compile Include="Attributes\IColumnInformationProvider.cs" />
     <Compile Include="VolatileService.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -205,6 +197,9 @@
   <ItemGroup>
     <None Include="project.json" />
     <None Include="SQLite.Net.ruleset" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Attributes\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
