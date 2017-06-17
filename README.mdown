@@ -16,7 +16,7 @@ Note: The original ORM like functionality is still available in this version but
 
 ### Pull requests welcome! Any attempts to address the existing issues are welcome as I don't have time to fix them all.
 
-#Quick Start
+# Quick Start
 Simply clone the repo, open the solution in Visual Studio 2017, and run the sample app to get it running.
 
 # Example
