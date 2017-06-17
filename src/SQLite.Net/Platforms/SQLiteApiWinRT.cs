@@ -187,8 +187,7 @@ namespace SQLite.Net.Platform.WinRT
 
         public Result Open(byte[] filename, out IDbHandle db, int flags, IntPtr zvfs)
         {
-            Sqlite3DatabaseHandle internalDbHandle;
-            var ret = SQLite3.Open(filename, out internalDbHandle, flags, zvfs);
+            var ret = SQLite3.Open(filename, out Sqlite3DatabaseHandle internalDbHandle, flags, zvfs);
             db = new DbHandle(internalDbHandle);
             return ret;
         }
@@ -202,8 +201,7 @@ namespace SQLite.Net.Platform.WinRT
         public IDbStatement Prepare2(IDbHandle db, string query)
         {
             var dbHandle = (DbHandle)db;
-            IntPtr stmt;
-            var r = SQLite3.Prepare2(dbHandle.InternalDbHandle, query, query.Length, out stmt, IntPtr.Zero);
+            var r = SQLite3.Prepare2(dbHandle.InternalDbHandle, query, query.Length, out Sqlite3DatabaseHandle stmt, IntPtr.Zero);
             if (r != Result.OK)
             {
                 throw SQLiteException.New(r, SQLite3.GetErrmsg(dbHandle.InternalDbHandle));

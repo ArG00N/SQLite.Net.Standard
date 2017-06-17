@@ -129,9 +129,8 @@ namespace SQLite.Net
 
             DatabasePath = databasePath;
 
-            IDbHandle handle;
             var databasePathAsBytes = GetNullTerminatedUtf8(DatabasePath);
-            var r = Platform.SQLiteApi.Open(databasePathAsBytes, out handle, (int)openFlags, IntPtr.Zero);
+            var r = Platform.SQLiteApi.Open(databasePathAsBytes, out IDbHandle handle, (int)openFlags, IntPtr.Zero);
 
             Handle = handle;
             if (r != Result.OK)
@@ -490,8 +489,7 @@ namespace SQLite.Net
             var firstLen = savePoint.IndexOf('D');
             if (firstLen >= 2 && savePoint.Length > firstLen + 1)
             {
-                int depth;
-                if (int.TryParse(savePoint.Substring(firstLen + 1), out depth))
+                if (int.TryParse(savePoint.Substring(firstLen + 1), out int depth))
                 {
                     // TODO: Mild race here, but inescapable without locking almost everywhere.
                     if (0 <= depth && depth < _transactionDepth)
@@ -563,9 +561,8 @@ namespace SQLite.Net
 
             var destDBPath = DatabasePath + "." + DateTime.UtcNow.ToString("yyyy-MM-dd_HH-mm-ss-fff");
 
-            IDbHandle destDB;
             var databasePathAsBytes = GetNullTerminatedUtf8(destDBPath);
-            var r = sqliteApi.Open(databasePathAsBytes, out destDB,
+            var r = sqliteApi.Open(databasePathAsBytes, out IDbHandle destDB,
                 (int)(SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite), IntPtr.Zero);
 
             if (r != Result.OK)

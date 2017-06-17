@@ -130,8 +130,6 @@ namespace SQLite.Net
 
                     columnsHaveBeenSet = true;
 
-                    OnInstanceCreated(rowList);
-
                     retVal.Data.Add(rowList);
                 }
 
@@ -153,22 +151,6 @@ namespace SQLite.Net
         }
 
 
-        /// <summary>
-        ///     Invoked every time an instance is loaded from the database.
-        /// </summary>
-        /// <param name='obj'>
-        ///     The newly created object.
-        /// </param>
-        /// <remarks>
-        ///     This can be overridden in combination with the <see cref="SQLiteConnection.NewCommand" />
-        ///     method to hook into the life-cycle of objects.
-        ///     Type safety is not possible because MonoTouch does not support virtual generic methods.
-        /// </remarks>
-
-        protected void OnInstanceCreated(object obj)
-        {
-            // Can be overridden.
-        }
 
 
 
