@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Path = System.IO.Path;
-
+using Stocks;
 
 namespace Stocks.CommandLine
 {
@@ -14,9 +14,8 @@ namespace Stocks.CommandLine
             new Program().Run();
         }
 
-        Database _db;
 
-        void Initialize()
+        void Run()
         {
             var dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Stocks.db");
 
@@ -25,142 +24,27 @@ namespace Stocks.CommandLine
                 File.Delete(dbPath);
             }
 
-            _db = new Database(dbPath);
-        }
+            Console.WriteLine("Creating database and valuation table...");
 
-        //void DisplayStock(string stockSymbol)
-        //{
-        //    var stock = _db.QueryStock(stockSymbol);
+            var database = new Stocks.Database(dbPath);
 
-        //    if (stock == null)
-        //    {
-        //        Console.WriteLine("I don't know about {0}", stockSymbol);
-        //        Console.WriteLine("Run \"up {0}\" to update the stock", stockSymbol);
-        //    }
-        //    else
-        //    {
+            Console.WriteLine("Downloading data and inserting in to table...");
 
-        //        //
-        //        // Display the last 1 week
-        //        //				
-        //        foreach (var v in _db.QueryValuations(stock))
-        //        {
-        //            Console.WriteLine("  {0}", v);
-        //        }
+            database.UpdateStock("BHP.AX");
 
-        //    }
-        //}
+            Console.WriteLine("Getting data from database...");
 
-        void UpdateStock(string stockSymbol)
-        {
-            _db.UpdateStock(stockSymbol);
-        }
+            var data = database.GetData();
 
-        //void ListStocks()
-        //{
-        //    foreach (var stock in _db.QueryAllStocks())
-        //    {
-        //        Console.WriteLine(stock);
-        //    }
-        //}
-
-        void DisplayBanner()
-        {
-            Console.WriteLine("Stocks - a demo of sqlite-net");
-            Console.WriteLine("Using " + _db.DatabasePath);
-            Console.WriteLine();
-        }
-
-        void DisplayHelp(string cmd)
-        {
-            Action<string, string> display = (c, h) => { Console.WriteLine("{0} {1}", c, h); };
-            var cmds = new SortedDictionary<string, string> {
-                {
-                    "ls",
-                    "\t List all known stocks"
-                },
-                {
-                    "exit",
-                    "\t Exit stocks"
-                },
-                {
-                    "up stock",
-                    "Updates stock"
-                },
-                {
-                    "help",
-                    "\t Displays help"
-                },
-                {
-                    "stock",
-                    "\t Displays latest valuations for stock"
-                }
-            };
-            if (cmds.ContainsKey(cmd))
+            foreach (var asd in data.Data)
             {
-                display(cmd, cmds[cmd]);
+                Console.WriteLine($"Price: {asd["Price"]}");
             }
-            else
-            {
-                foreach (var ch in cmds)
-                {
-                    display(ch.Key, ch.Value);
-                }
-            }
-        }
 
-        void Run()
-        {
-            var WS = new char[] {
-                ' ',
-                '\t',
-                '\r',
-                '\n'
-            };
 
-            Initialize();
+            Console.WriteLine("Done.");
 
-            DisplayBanner();
-            DisplayHelp("");
-
-            for (;;)
-            {
-                Console.Write("$ ");
-                var cmdline = Console.ReadLine();
-
-                var args = cmdline.Split(WS, StringSplitOptions.RemoveEmptyEntries);
-                if (args.Length < 1)
-                    continue;
-                var cmd = args[0].ToLowerInvariant();
-
-                if (cmd == "?" || cmd == "help")
-                {
-                    DisplayHelp("");
-                }
-                else if (cmd == "exit")
-                {
-                    break;
-                }
-                else if (cmd == "ls")
-                {
-                    //ListStocks();
-                }
-                else if (cmd == "up")
-                {
-                    if (args.Length == 2)
-                    {
-                        UpdateStock(args[1].ToUpperInvariant());
-                    }
-                    else
-                    {
-                        DisplayHelp("up stock");
-                    }
-                }
-                else
-                {
-                    //DisplayStock(cmd.ToUpperInvariant());
-                }
-            }
+            Console.Read();
         }
     }
 }

@@ -10,7 +10,6 @@ namespace Stocks
         {
             var url = $"http://finance.yahoo.com/d/quotes.csv?s=" + stock.Symbol + "&f=snd1l1yr";
 
-            Console.WriteLine("GET {0}", url);
             var req = System.Net.WebRequest.Create(url);
             using (var resp = new System.IO.StreamReader(req.GetResponse().GetResponseStream()))
             {

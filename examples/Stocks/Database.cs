@@ -18,11 +18,15 @@ namespace Stocks
             "    Price           TEXT NOT NULL " +
            ");");
 
-            UpdateStock("BHP.AX");
+         
+        }
 
+        public SQLiteCommandResult GetData()
+        {
             var command = CreateCommand("SELECT * FROM 'VALUATION'");
             var data = command.ExecuteDeferredQuery();
 
+            return data;
         }
 
         public void UpdateStock(string stockSymbol)
