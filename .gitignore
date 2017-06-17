@@ -3,6 +3,7 @@
 *.userprefs
 *.user
 *.suo
+*.DotSettings
 _Resharper*
 obj
 bin
@@ -14,3 +15,4 @@ TestResults
 /.vs
 /nuget/SQLite.Net*
 project.lock.json
+
