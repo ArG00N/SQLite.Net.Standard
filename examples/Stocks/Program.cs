@@ -28,41 +28,41 @@ namespace Stocks.CommandLine
             _db = new Database(dbPath);
         }
 
-        void DisplayStock(string stockSymbol)
-        {
-            var stock = _db.QueryStock(stockSymbol);
+        //void DisplayStock(string stockSymbol)
+        //{
+        //    var stock = _db.QueryStock(stockSymbol);
 
-            if (stock == null)
-            {
-                Console.WriteLine("I don't know about {0}", stockSymbol);
-                Console.WriteLine("Run \"up {0}\" to update the stock", stockSymbol);
-            }
-            else
-            {
+        //    if (stock == null)
+        //    {
+        //        Console.WriteLine("I don't know about {0}", stockSymbol);
+        //        Console.WriteLine("Run \"up {0}\" to update the stock", stockSymbol);
+        //    }
+        //    else
+        //    {
 
-                //
-                // Display the last 1 week
-                //				
-                foreach (var v in _db.QueryValuations(stock))
-                {
-                    Console.WriteLine("  {0}", v);
-                }
+        //        //
+        //        // Display the last 1 week
+        //        //				
+        //        foreach (var v in _db.QueryValuations(stock))
+        //        {
+        //            Console.WriteLine("  {0}", v);
+        //        }
 
-            }
-        }
+        //    }
+        //}
 
         void UpdateStock(string stockSymbol)
         {
             _db.UpdateStock(stockSymbol);
         }
 
-        void ListStocks()
-        {
-            foreach (var stock in _db.QueryAllStocks())
-            {
-                Console.WriteLine(stock);
-            }
-        }
+        //void ListStocks()
+        //{
+        //    foreach (var stock in _db.QueryAllStocks())
+        //    {
+        //        Console.WriteLine(stock);
+        //    }
+        //}
 
         void DisplayBanner()
         {
@@ -143,7 +143,7 @@ namespace Stocks.CommandLine
                 }
                 else if (cmd == "ls")
                 {
-                    ListStocks();
+                    //ListStocks();
                 }
                 else if (cmd == "up")
                 {
@@ -158,7 +158,7 @@ namespace Stocks.CommandLine
                 }
                 else
                 {
-                    DisplayStock(cmd.ToUpperInvariant());
+                    //DisplayStock(cmd.ToUpperInvariant());
                 }
             }
         }
