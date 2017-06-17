@@ -67,7 +67,7 @@ namespace SQLite.Net.Platform.Generic
         public static extern Result sqlite3_shutdown();
 
         [DllImport("sqlite3", EntryPoint = "sqlite3_column_blob", CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr sqlite3_column_blob(IntPtr stmt, int index);
+        private static extern IntPtr sqlite3_column_blob(IntPtr stmt, int index);
 
         [DllImport("sqlite3", EntryPoint = "sqlite3_column_bytes", CallingConvention = CallingConvention.Cdecl)]
         public static extern int sqlite3_column_bytes(IntPtr stmt, int index);
@@ -142,9 +142,6 @@ namespace SQLite.Net.Platform.Generic
         [DllImport("sqlite3", EntryPoint = "sqlite3_win32_set_directory", CallingConvention = CallingConvention.Cdecl,
             CharSet = CharSet.Unicode)]
         public static extern int sqlite3_win32_set_directory(uint directoryType, string directoryPath);
-
-        [DllImport("kernel32", SetLastError = true, CharSet = CharSet.Unicode)]
-        private static extern IntPtr LoadLibrary(string lpFileName);
 
         [DllImport("sqlite3", EntryPoint = "sqlite3_column_name16", CallingConvention = CallingConvention.Cdecl)]
         private static extern IntPtr sqlite3_column_name16(IntPtr stmt, int index);

@@ -285,10 +285,6 @@ namespace SQLite.Net.Platform.WinRT
 
             internal IntPtr DbBackupPtr { get; set; }
 
-            public bool Equals(IDbBackupHandle other)
-            {
-                return other is DbBackupHandle && DbBackupPtr == ((DbBackupHandle)other).DbBackupPtr;
-            }
         }
 
         #endregion
@@ -303,10 +299,6 @@ namespace SQLite.Net.Platform.WinRT
 
             public Sqlite3DatabaseHandle InternalDbHandle { get; set; }
 
-            public bool Equals(IDbHandle other)
-            {
-                return other is DbHandle && InternalDbHandle == ((DbHandle)other).InternalDbHandle;
-            }
         }
 
         private struct DbStatement : IDbStatement
@@ -319,10 +311,6 @@ namespace SQLite.Net.Platform.WinRT
 
             internal Sqlite3Statement InternalStmt { get; set; }
 
-            public bool Equals(IDbStatement other)
-            {
-                return (other is DbStatement) && ((DbStatement)other).InternalStmt == InternalStmt;
-            }
         }
     }
 
@@ -371,7 +359,7 @@ namespace SQLite.Net.Platform.WinRT
         public static extern long LastInsertRowid(IntPtr db);
 
         [DllImport("sqlite3", EntryPoint = "sqlite3_errmsg16", CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr Errmsg(IntPtr db);
+        private static extern IntPtr Errmsg(IntPtr db);
 
         public static string GetErrmsg(IntPtr db)
         {

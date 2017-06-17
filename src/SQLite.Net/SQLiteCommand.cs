@@ -38,7 +38,7 @@ namespace SQLite.Net
         [NotNull] private readonly List<Binding> _bindings;
 
         private readonly SQLiteConnection _conn;
-        public readonly ISQLitePlatform _sqlitePlatform;
+        private readonly ISQLitePlatform _sqlitePlatform;
         private const string DateTimeFormat = "yyyy-MM-ddTHH:mm:ss.fffffffZ";
         internal SQLiteCommand(ISQLitePlatform platformImplementation, SQLiteConnection conn)
         {
@@ -296,7 +296,7 @@ namespace SQLite.Net
         }
 
         //NOTE: Changed security modifer
-        public IDbStatement Prepare()
+        private IDbStatement Prepare()
         {
             var stmt = _sqlitePlatform.SQLiteApi.Prepare2(_conn.Handle, CommandText);
             BindAll(stmt);
@@ -480,7 +480,7 @@ namespace SQLite.Net
 
         //NOTE: Changed security modifer
         [CanBeNull]
-        public object ReadCol(IDbStatement stmt, int index, ColType type, Type clrType)
+        private object ReadCol(IDbStatement stmt, int index, ColType type, Type clrType)
         {
             var interfaces = clrType.GetTypeInfo().ImplementedInterfaces.ToList();
 

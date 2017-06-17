@@ -144,7 +144,7 @@ namespace SQLite.Net.Platform.OSX
 
         [DllImport("libsqlite3_for_net", EntryPoint = "sqlite3_column_blob", CallingConvention = CallingConvention.Cdecl
             )]
-        public static extern IntPtr sqlite3_column_blob(IntPtr stmt, int index);
+        private static extern IntPtr sqlite3_column_blob(IntPtr stmt, int index);
 
         [DllImport("libsqlite3_for_net", EntryPoint = "sqlite3_column_bytes",
             CallingConvention = CallingConvention.Cdecl)]

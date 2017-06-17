@@ -89,11 +89,9 @@ namespace SQLite.Net
         {
             public Entry(ISQLitePlatform sqlitePlatform, SQLiteConnectionString connectionString)
             {
-                ConnectionString = connectionString;
                 Connection = new SQLiteConnectionWithLock(sqlitePlatform, connectionString);
             }
 
-            public SQLiteConnectionString ConnectionString { get; private set; }
             public SQLiteConnectionWithLock Connection { get; private set; }
 
             public void OnApplicationSuspended()

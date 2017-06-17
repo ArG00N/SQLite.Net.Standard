@@ -263,9 +263,6 @@ namespace SQLite.Net.Platform.OSX
         
         	internal IntPtr DbBackupPtr { get; set; }
         
-        	public bool Equals(IDbBackupHandle other) {
-        		return other is DbBackupHandle && DbBackupPtr == ((DbBackupHandle)other).DbBackupPtr;
-        	}
         }
         
         #endregion
@@ -279,10 +276,6 @@ namespace SQLite.Net.Platform.OSX
 
             internal IntPtr DbPtr { get; set; }
 
-            public bool Equals(IDbHandle other)
-            {
-                return other is DbHandle && DbPtr == ((DbHandle) other).DbPtr;
-            }
         }
 
         private struct DbStatement : IDbStatement
@@ -294,10 +287,6 @@ namespace SQLite.Net.Platform.OSX
 
             internal IntPtr StmtPtr { get; set; }
 
-            public bool Equals(IDbStatement other)
-            {
-                return other is DbStatement && StmtPtr == ((DbStatement) other).StmtPtr;
-            }
         }
     }
 }
