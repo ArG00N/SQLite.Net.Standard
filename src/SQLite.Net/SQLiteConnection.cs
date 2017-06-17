@@ -43,9 +43,6 @@ namespace SQLite.Net
         ///     Used to list some code that we want the MonoTouch linker
         ///     to see, but that we never want to actually execute.
         /// </summary>
-#pragma warning disable 649
-        private static bool _preserveDuringLinkMagic;
-#pragma warning restore 649
         private readonly Random _rand = new Random();
 
 		private readonly object _tableMappingsLocks;
@@ -56,15 +53,6 @@ namespace SQLite.Net
         private IStopwatch _sw;
         private int _transactionDepth;
 
-        static SQLiteConnection()
-        {
-            if (_preserveDuringLinkMagic)
-            {
-                // ReSharper disable once UseObjectOrCollectionInitializer
-                var ti = new ColumnInfo();
-                ti.Name = "magic";
-            }
-        }
 
         /// <summary>
         ///     Constructs a new SQLiteConnection and opens a SQLite database specified by databasePath.
@@ -685,31 +673,5 @@ namespace SQLite.Net
                 }
             }
         }
-
-        public class ColumnInfo
-        {
-            //			public int cid { get; set; }
-
-            [PublicAPI]
-            [Column("name")]
-            public string Name { get; set; }
-
-            //			[Column ("type")]
-            //			public string ColumnType { get; set; }
-
-            [PublicAPI]
-            public int notnull { get; set; }
-
-            //			public string dflt_value { get; set; }
-
-            //			public int pk { get; set; }
-
-            [PublicAPI]
-            public override string ToString()
-            {
-                return Name;
-            }
-        }
-
     }
 }
