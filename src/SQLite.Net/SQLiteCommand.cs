@@ -153,23 +153,6 @@ namespace SQLite.Net
             }
         }
 
-        [PublicAPI]
-        public IEnumerable<T> ExecuteDeferredQuery<T>()
-        {
-            return ExecuteDeferredQuery<T>(_conn.GetMapping(typeof(T)));
-        }
-
-        [PublicAPI]
-        public List<T> ExecuteQuery<T>()
-        {
-            return ExecuteDeferredQuery<T>(_conn.GetMapping(typeof(T))).ToList();
-        }
-
-        [PublicAPI]
-        public List<T> ExecuteQuery<T>(TableMapping map)
-        {
-            return ExecuteDeferredQuery<T>(map).ToList();
-        }
 
         /// <summary>
         ///     Invoked every time an instance is loaded from the database.
@@ -188,82 +171,7 @@ namespace SQLite.Net
             // Can be overridden.
         }
 
-        [PublicAPI]
-        public IEnumerable<T> ExecuteDeferredQuery<T>(TableMapping map)
-        {
-            _conn.TraceListener.WriteLine("Executing Query: {0}", this);
 
-            var stmt = Prepare();
-            try
-            {
-                var cols = new TableMapping.Column[_sqlitePlatform.SQLiteApi.ColumnCount(stmt)];
-
-                for (var i = 0; i < cols.Length; i++)
-                {
-                    var name = _sqlitePlatform.SQLiteApi.ColumnName16(stmt, i);
-                    cols[i] = map.FindColumn(name);
-                }
-
-                while (_sqlitePlatform.SQLiteApi.Step(stmt) == Result.Row)
-                {
-                    var obj = _conn.Resolver.CreateObject(map.MappedType);
-                    for (var i = 0; i < cols.Length; i++)
-                    {
-                        if (cols[i] == null)
-                        {
-                            continue;
-                        }
-                        var colType = _sqlitePlatform.SQLiteApi.ColumnType(stmt, i);
-                        var val = ReadCol(stmt, i, colType, cols[i].ColumnType);
-                        cols[i].SetValue(obj, val);
-                    }
-                    OnInstanceCreated(obj);
-                    yield return (T)obj;
-                }
-            }
-            finally
-            {
-                _sqlitePlatform.SQLiteApi.Finalize(stmt);
-            }
-        }
-
-        [PublicAPI]
-        [CanBeNull]
-        public T ExecuteScalar<T>()
-        {
-            _conn.TraceListener.WriteLine("Executing Query: {0}", this);
-
-            var val = default(T);
-
-            var stmt = Prepare();
-
-            try
-            {
-                var r = _sqlitePlatform.SQLiteApi.Step(stmt);
-                if (r == Result.Row)
-                {
-                    var colType = _sqlitePlatform.SQLiteApi.ColumnType(stmt, 0);
-                    var clrType = Nullable.GetUnderlyingType(typeof(T)) ?? typeof(T);
-                    if (colType != ColType.Null)
-                    {
-                        val = (T)ReadCol(stmt, 0, colType, clrType);
-                    }
-                }
-                else if (r == Result.Done)
-                {
-                }
-                else
-                {
-                    throw SQLiteException.New(r, _sqlitePlatform.SQLiteApi.Errmsg16(_conn.Handle));
-                }
-            }
-            finally
-            {
-                Finalize(stmt);
-            }
-
-            return val;
-        }
 
         [PublicAPI]
         public void Bind([CanBeNull] string name, [CanBeNull] object val)

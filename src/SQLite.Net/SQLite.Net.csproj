@@ -48,8 +48,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
-    <CodeAnalysisRuleSet>SQLite.Net.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <CodeAnalysisRuleSet>SecurityRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -132,7 +132,6 @@
     </Compile>
     <Compile Include="ActiveInsertCommand.cs" />
     <Compile Include="Annotations\JetBrains.cs" />
-    <Compile Include="AsyncTableQuery.cs" />
     <Compile Include="Attributes\DefaultAttribute.cs" />
     <Compile Include="Attributes\NotNullAttribute.cs" />
     <Compile Include="BaseTableQuery.cs" />
@@ -181,7 +180,6 @@
     <Compile Include="Attributes\MaxLengthAttribute.cs" />
     <Compile Include="Attributes\PrimaryKeyAttribute.cs" />
     <Compile Include="ReflectionService.cs" />
-    <Compile Include="SQLiteAsyncConnection.cs" />
     <Compile Include="SQLiteException.cs" />
     <Compile Include="SQLiteCommand.cs" />
     <Compile Include="SQLiteConnection.cs" />
@@ -191,7 +189,6 @@
     <Compile Include="SQLiteCommandResult.cs" />
     <Compile Include="StopwatchFactory.cs" />
     <Compile Include="TableMapping.cs" />
-    <Compile Include="TableQuery.cs" />
     <Compile Include="Interop\SQLiteOpenFlags.cs" />
     <Compile Include="Attributes\TableAttribute.cs" />
     <Compile Include="Attributes\UniqueAttribute.cs" />

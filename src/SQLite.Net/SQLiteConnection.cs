@@ -363,102 +363,6 @@ namespace SQLite.Net
             return Execute(query);
         }
 
-        /// <summary>
-        ///     Executes a "create table if not exists" on the database. It also
-        ///     creates any specified indexes on the columns of the table. It uses
-        ///     a schema automatically generated from the specified type. You can
-        ///     later access this schema by calling GetMapping.
-        /// </summary>
-        /// <returns>
-        ///     The number of entries added to the database schema.
-        /// </returns>
-        [PublicAPI]
-        public int CreateTable<T>(CreateFlags createFlags = CreateFlags.None)
-        {
-            return CreateTable(typeof (T), createFlags);
-        }
-
-        /// <summary>
-        ///     Executes a "create table if not exists" on the database. It also
-        ///     creates any specified indexes on the columns of the table. It uses
-        ///     a schema automatically generated from the specified type. You can
-        ///     later access this schema by calling GetMapping.
-        /// </summary>
-        /// <param name="ty">Type to reflect to a database table.</param>
-        /// <param name="createFlags">Optional flags allowing implicit PK and indexes based on naming conventions.</param>
-        /// <returns>
-        ///     The number of entries added to the database schema.
-        /// </returns>
-        [PublicAPI]
-        public int CreateTable(Type ty, CreateFlags createFlags = CreateFlags.None)
-        {
-            var map = GetMapping(ty, createFlags);
-
-            var query = "create table if not exists \"" + map.TableName + "\"(\n";
-
-            var mapColumns = map.Columns;
-
-            if (!mapColumns.Any())
-            {
-                throw new Exception("Table has no (public) columns");
-            }
-
-            var decls = mapColumns.Select(p => Orm.SqlDecl(p, StoreDateTimeAsTicks, Serializer, ExtraTypeMappings));
-            var decl = string.Join(",\n", decls.ToArray());
-            query += decl;
-            query += ")";
-
-            var count = Execute(query);
-
-            if (count == 0)
-            {
-                //Possible bug: This always seems to return 0?
-                // Table already exists, migrate it
-                MigrateTable(map);
-            }
-
-            var indexes = new Dictionary<string, IndexInfo>();
-            foreach (var c in mapColumns)
-            {
-                foreach (var i in c.Indices)
-                {
-                    var iname = i.Name ?? map.TableName + "_" + c.Name;
-                    IndexInfo iinfo;
-                    if (!indexes.TryGetValue(iname, out iinfo))
-                    {
-                        iinfo = new IndexInfo
-                        {
-                            IndexName = iname,
-                            TableName = map.TableName,
-                            Unique = i.Unique,
-                            Columns = new List<IndexedColumn>()
-                        };
-                        indexes.Add(iname, iinfo);
-                    }
-
-                    if (i.Unique != iinfo.Unique)
-                    {
-                        throw new Exception(
-                            "All the columns in an index must have the same value for their Unique property");
-                    }
-
-                    iinfo.Columns.Add(new IndexedColumn
-                    {
-                        Order = i.Order,
-                        ColumnName = c.Name
-                    });
-                }
-            }
-
-            foreach (var indexName in indexes.Keys)
-            {
-                var index = indexes[indexName];
-                var columns = index.Columns.OrderBy(i => i.Order).Select(i => i.ColumnName).ToArray();
-                count += CreateIndex(indexName, index.TableName, columns, index.Unique);
-            }
-
-            return count;
-        }
 
         /// <summary>
         ///     Creates an index for the specified table and columns.
@@ -549,56 +453,7 @@ namespace SQLite.Net
             CreateIndex(map.TableName, colName, unique);
         }
 
-        [PublicAPI]
-        public List<ColumnInfo> GetTableInfo(string tableName)
-        {
-            var query = "pragma table_info(\"" + tableName + "\")";
-            return Query<ColumnInfo>(query);
-        }
 
-		[PublicAPI]
-		public void MigrateTable<T>()
-		{
-			MigrateTable(typeof(T));
-		}
-
-		[PublicAPI]
-		public void MigrateTable(Type t)
-		{
-			var map = GetMapping(t);
-			MigrateTable(map);
-		}
-
-        private void MigrateTable(TableMapping map)
-        {
-            var existingCols = GetTableInfo(map.TableName);
-
-            var toBeAdded = new List<TableMapping.Column>();
-
-            foreach (var p in map.Columns)
-            {
-                var found = false;
-                foreach (var c in existingCols)
-                {
-                    found = (string.Compare(p.Name, c.Name, StringComparison.OrdinalIgnoreCase) == 0);
-                    if (found)
-                    {
-                        break;
-                    }
-                }
-                if (!found)
-                {
-                    toBeAdded.Add(p);
-                }
-            }
-
-            foreach (var p in toBeAdded)
-            {
-                var addCol = "alter table \"" + map.TableName + "\" add column " +
-                             Orm.SqlDecl(p, StoreDateTimeAsTicks, Serializer, ExtraTypeMappings);
-                Execute(addCol);
-            }
-        }
 
         /// <summary>
         ///     Creates a new SQLiteCommand. Can be overridden to provide a sub-class.
@@ -685,33 +540,6 @@ namespace SQLite.Net
             return r;
         }
 
-        [PublicAPI]
-        public T ExecuteScalar<T>(string query, params object[] args)
-        {
-            var cmd = CreateCommand(query, args);
-
-            if (TimeExecution)
-            {
-                if (_sw == null)
-                {
-                    _sw = Platform.StopwatchFactory.Create();
-                }
-                _sw.Reset();
-                _sw.Start();
-            }
-
-            var r = cmd.ExecuteScalar<T>();
-
-            if (TimeExecution)
-            {
-                _sw.Stop();
-                _elapsedMilliseconds += _sw.ElapsedMilliseconds;
-
-                TraceListener.WriteLine("Finished in {0} ms ({1:0.0} s total)", _sw.ElapsedMilliseconds, _elapsedMilliseconds/1000.0);
-            }
-
-            return r;
-        }
 
         /// <summary>
         ///     Creates a SQLiteCommand given the command text (SQL) with arguments. Place a '?'
@@ -727,37 +555,10 @@ namespace SQLite.Net
         /// </param>
         /// <returns>
         ///     An enumerable with one result for each row returned by the query.
-        /// </returns>
-        [PublicAPI]
-        public List<T> Query<T>(string query, params object[] args) where T : class
-        {
-            var cmd = CreateCommand(query, args);
-            return cmd.ExecuteQuery<T>();
-        }
 
         /// <summary>
         ///     Creates a SQLiteCommand given the command text (SQL) with arguments. Place a '?'
         ///     in the command text for each of the arguments and then executes that command.
-        ///     It returns each row of the result using the mapping automatically generated for
-        ///     the given type.
-        /// </summary>
-        /// <param name="query">
-        ///     The fully escaped SQL.
-        /// </param>
-        /// <param name="args">
-        ///     Arguments to substitute for the occurences of '?' in the query.
-        /// </param>
-        /// <returns>
-        ///     An enumerable with one result for each row returned by the query.
-        ///     The enumerator will call sqlite3_step on each call to MoveNext, so the database
-        ///     connection must remain open for the lifetime of the enumerator.
-        /// </returns>
-        [PublicAPI]
-        public IEnumerable<T> DeferredQuery<T>(string query, params object[] args) where T : class
-        {
-            var cmd = CreateCommand(query, args);
-            return cmd.ExecuteDeferredQuery<T>();
-        }
 
         /// <summary>
         ///     Creates a SQLiteCommand given the command text (SQL) with arguments. Place a '?'
@@ -778,168 +579,13 @@ namespace SQLite.Net
         /// </param>
         /// <returns>
         ///     An enumerable with one result for each row returned by the query.
-        /// </returns>
-        [PublicAPI]
-        public List<object> Query(TableMapping map, string query, params object[] args)
-        {
-            var cmd = CreateCommand(query, args);
-            return cmd.ExecuteQuery<object>(map);
-        }
 
         /// <summary>
-        ///     Creates a SQLiteCommand given the command text (SQL) with arguments. Place a '?'
-        ///     in the command text for each of the arguments and then executes that command.
-        ///     It returns each row of the result using the specified mapping. This function is
-        ///     only used by libraries in order to query the database via introspection. It is
-        ///     normally not used.
-        /// </summary>
-        /// <param name="map">
-        ///     A <see cref="TableMapping" /> to use to convert the resulting rows
-        ///     into objects.
-        /// </param>
-        /// <param name="query">
-        ///     The fully escaped SQL.
-        /// </param>
-        /// <param name="args">
-        ///     Arguments to substitute for the occurences of '?' in the query.
-        /// </param>
-        /// <returns>
-        ///     An enumerable with one result for each row returned by the query.
-        ///     The enumerator will call sqlite3_step on each call to MoveNext, so the database
-        ///     connection must remain open for the lifetime of the enumerator.
-        /// </returns>
-        [PublicAPI]
-        public IEnumerable<object> DeferredQuery(TableMapping map, string query, params object[] args)
-        {
-            var cmd = CreateCommand(query, args);
-            return cmd.ExecuteDeferredQuery<object>(map);
-        }
 
         /// <summary>
-        ///     Returns a queryable interface to the table represented by the given type.
-        /// </summary>
-        /// <returns>
-        ///     A queryable object that is able to translate Where, OrderBy, and Take
-        ///     queries into native SQL.
-        /// </returns>
-        [PublicAPI]
-        public TableQuery<T> Table<T>() where T : class
-        {
-            return new TableQuery<T>(Platform, this);
-        }
 
-        /// <summary>
-        ///     Attempts to retrieve an object with the given primary key from the table
-        ///     associated with the specified type. Use of this method requires that
-        ///     the given type have a designated PrimaryKey (using the PrimaryKeyAttribute).
-        /// </summary>
-        /// <param name="pk">
-        ///     The primary key.
-        /// </param>
-        /// <returns>
-        ///     The object with the given primary key. Throws a not found exception
-        ///     if the object is not found.
-        /// </returns>
-        [PublicAPI]
-        public T Get<T>(object pk) where T : class
-        {
-            var map = GetMapping(typeof (T));
-            return Query<T>(map.GetByPrimaryKeySql, pk).First();
-        }
 
-        /// <summary>
-        ///     Attempts to retrieve the first object that matches the predicate from the table
-        ///     associated with the specified type.
-        /// </summary>
-        /// <param name="predicate">
-        ///     A predicate for which object to find.
-        /// </param>
-        /// <returns>
-        ///     The object that matches the given predicate. Throws a not found exception
-        ///     if the object is not found.
-        /// </returns>
-        [PublicAPI]
-        public T Get<T>(Expression<Func<T, bool>> predicate) where T : class
-        {
-            return Table<T>().Where(predicate).First();
-        }
 
-        /// <summary>
-        ///     Attempts to retrieve an object with the given primary key from the table
-        ///     associated with the specified type. Use of this method requires that
-        ///     the given type have a designated PrimaryKey (using the PrimaryKeyAttribute).
-        /// </summary>
-        /// <param name="pk">
-        ///     The primary key.
-        /// </param>
-        /// <returns>
-        ///     The object with the given primary key or null
-        ///     if the object is not found.
-        /// </returns>
-        [PublicAPI]
-        public T Find<T>(object pk) where T : class
-        {
-            var map = GetMapping(typeof (T));
-            return Query<T>(map.GetByPrimaryKeySql, pk).FirstOrDefault();
-        }
-
-        /// <summary>
-        ///     Attempts to retrieve the first object that matches the query from the table
-        ///     associated with the specified type.
-        /// </summary>
-        /// <param name="query">
-        ///     The fully escaped SQL.
-        /// </param>
-        /// <param name="args">
-        ///     Arguments to substitute for the occurences of '?' in the query.
-        /// </param>
-        /// <returns>
-        ///     The object that matches the given predicate or null
-        ///     if the object is not found.
-        /// </returns>
-        [PublicAPI]
-        public T FindWithQuery<T>(string query, params object[] args) where T : class
-        {
-            return Query<T>(query, args).FirstOrDefault();
-        }
-
-        /// <summary>
-        ///     Attempts to retrieve an object with the given primary key from the table
-        ///     associated with the specified type. Use of this method requires that
-        ///     the given type have a designated PrimaryKey (using the PrimaryKeyAttribute).
-        /// </summary>
-        /// <param name="pk">
-        ///     The primary key.
-        /// </param>
-        /// <param name="map">
-        ///     The TableMapping used to identify the object type.
-        /// </param>
-        /// <returns>
-        ///     The object with the given primary key or null
-        ///     if the object is not found.
-        /// </returns>
-        [PublicAPI]
-        public object Find(object pk, TableMapping map)
-        {
-            return Query(map, map.GetByPrimaryKeySql, pk).FirstOrDefault();
-        }
-
-        /// <summary>
-        ///     Attempts to retrieve the first object that matches the predicate from the table
-        ///     associated with the specified type.
-        /// </summary>
-        /// <param name="predicate">
-        ///     A predicate for which object to find.
-        /// </param>
-        /// <returns>
-        ///     The object that matches the given predicate or null
-        ///     if the object is not found.
-        /// </returns>
-        [PublicAPI]
-        public T Find<T>(Expression<Func<T, bool>> predicate) where T : class
-        {
-            return Table<T>().Where(predicate).FirstOrDefault();
-        }
 
         /// <summary>
         ///     Begins a new transaction. Call <see cref="Commit" /> to end the transaction.
@@ -1891,18 +1537,18 @@ namespace SQLite.Net
             }
         }
 
-        private struct IndexInfo
-        {
-            public List<IndexedColumn> Columns;
-            public string IndexName;
-            public string TableName;
-            public bool Unique;
-        }
+        //private struct IndexInfo
+        //{
+        //    public List<IndexedColumn> Columns;
+        //    public string IndexName;
+        //    public string TableName;
+        //    public bool Unique;
+        //}
 
-        private struct IndexedColumn
-        {
-            public string ColumnName;
-            public int Order;
-        }
+        //private struct IndexedColumn
+        //{
+        //    public string ColumnName;
+        //    public int Order;
+        //}
     }
 }

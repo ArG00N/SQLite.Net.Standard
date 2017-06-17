@@ -67,16 +67,16 @@ namespace SQLite.Net
         [PublicAPI]
         public TableMapping Table { get; private set; }
 
-        [PublicAPI]
-        public IEnumerator<T> GetEnumerator()
-        {
-            if (!_deferred)
-            {
-                return GenerateCommand("*").ExecuteQuery<T>().GetEnumerator();
-            }
+        //[PublicAPI]
+        //public IEnumerator<T> GetEnumerator()
+        //{
+        //    if (!_deferred)
+        //    {
+        //        return GenerateCommand("*").ExecuteQuery<T>().GetEnumerator();
+        //    }
 
-            return GenerateCommand("*").ExecuteDeferredQuery<T>().GetEnumerator();
-        }
+        //    return GenerateCommand("*").ExecuteDeferredQuery<T>().GetEnumerator();
+        //}
 
         [PublicAPI]
         IEnumerator IEnumerable.GetEnumerator()
