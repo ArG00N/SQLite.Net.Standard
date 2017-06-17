@@ -112,12 +112,8 @@ namespace SQLite.Net
             bool storeDateTimeAsTicks = true, IBlobSerializer serializer = null, IDictionary<Type, string> extraTypeMappings = null,
             IContractResolver resolver = null)
         {
-            if (sqlitePlatform == null)
-            {
-                throw new ArgumentNullException(nameof(sqlitePlatform));
-            }
             Serializer = serializer;
-            Platform = sqlitePlatform;
+            Platform = sqlitePlatform ?? throw new ArgumentNullException(nameof(sqlitePlatform));
             Resolver = resolver ?? ContractResolver.Current;
 
             _tableMappingsLocks = new object();
@@ -138,12 +134,7 @@ namespace SQLite.Net
                 throw SQLiteException.New(r, string.Format("Could not open database file: {0} ({1})", DatabasePath, r));
             }
 
-            if (handle == null)
-            {
-                throw new NullReferenceException("Database handle is null");
-            }
-
-            Handle = handle;
+            Handle = handle ?? throw new NullReferenceException("Database handle is null");
 
             _open = true;
 

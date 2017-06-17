@@ -94,7 +94,10 @@ namespace SQLite.Net.Platform.WinRT
             var length = ColumnBytes(stmt, index);
             var result = new byte[length];
             if (length > 0)
+            {
                 Marshal.Copy(SQLite3.ColumnBlob(dbStatement.InternalStmt, index), result, 0, length);
+            }
+
             return result;
         }
 

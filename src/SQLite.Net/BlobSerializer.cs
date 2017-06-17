@@ -2,7 +2,7 @@
 
 namespace SQLite.Net
 {
-    public class BlobSerializerDelegate : IBlobSerializer
+    public class BlobSerializer : IBlobSerializer
     {
         public delegate bool CanSerializeDelegate(Type type);
 
@@ -14,7 +14,7 @@ namespace SQLite.Net
         private readonly DeserializeDelegate _deserializeDelegate;
         private readonly SerializeDelegate _serializeDelegate;
 
-        public BlobSerializerDelegate(SerializeDelegate serializeDelegate,
+        public BlobSerializer(SerializeDelegate serializeDelegate,
             DeserializeDelegate deserializeDelegate,
             CanSerializeDelegate canDeserializeDelegate)
         {
