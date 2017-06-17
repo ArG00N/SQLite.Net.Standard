@@ -48,8 +48,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
-    <CodeAnalysisRuleSet>SecurityRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <CodeAnalysisRuleSet>SQLite.Net.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -134,7 +134,6 @@
     <Compile Include="Annotations\JetBrains.cs" />
     <Compile Include="Attributes\DefaultAttribute.cs" />
     <Compile Include="Attributes\NotNullAttribute.cs" />
-    <Compile Include="BaseTableQuery.cs" />
     <Compile Include="BlobSerializerDelegate.cs" />
     <Compile Include="CreateTablesResult.cs" />
     <Compile Include="ContractResolver.cs" />
