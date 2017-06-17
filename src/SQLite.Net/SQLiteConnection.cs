@@ -136,7 +136,7 @@ namespace SQLite.Net
 
         public IDbHandle Handle { get; private set; }
 
-        private string DatabasePath { get; }
+        public string DatabasePath { get; }
 
 
         public bool TimeExecution { get; set; }

@@ -53,9 +53,12 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Main.cs" />
+    <Compile Include="Database.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Stocks.cs" />
+    <Compile Include="Stock.cs" />
+    <Compile Include="Valuation.cs" />
+    <Compile Include="YahooScraper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
