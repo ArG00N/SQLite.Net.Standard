@@ -41,11 +41,11 @@ namespace SQLite.Net
         {
             if (canCreate == null)
             {
-                throw new ArgumentNullException("canCreate");
+                throw new ArgumentNullException(nameof(canCreate));
             }
             if (create == null)
             {
-                throw new ArgumentNullException("create");
+                throw new ArgumentNullException(nameof(create));
             }
             _canCreate = canCreate;
             _create = create;

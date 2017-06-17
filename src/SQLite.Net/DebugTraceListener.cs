@@ -4,8 +4,6 @@ namespace SQLite.Net
 {
     public sealed class DebugTraceListener : ITraceListener
     {
-        public static DebugTraceListener Instance = new DebugTraceListener();
-
         private DebugTraceListener()
         {
         }

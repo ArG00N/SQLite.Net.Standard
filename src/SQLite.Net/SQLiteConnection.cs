@@ -120,7 +120,7 @@ namespace SQLite.Net
         {
             if (sqlitePlatform == null)
             {
-                throw new ArgumentNullException("sqlitePlatform");
+                throw new ArgumentNullException(nameof(sqlitePlatform));
             }
             ExtraTypeMappings = extraTypeMappings ?? new Dictionary<Type, string>();
             Serializer = serializer;
@@ -131,7 +131,7 @@ namespace SQLite.Net
 
             if (string.IsNullOrEmpty(databasePath))
             {
-                throw new ArgumentException("Must be specified", "databasePath");
+                throw new ArgumentException("Must be specified", nameof(databasePath));
             }
 
             DatabasePath = databasePath;
@@ -527,7 +527,7 @@ namespace SQLite.Net
             }
 
             throw new ArgumentException(
-                "savePoint is not valid, and should be the result of a call to SaveTransactionPoint.", "savePoint");
+                "savePoint is not valid, and should be the result of a call to SaveTransactionPoint.", nameof(savePoint));
         }
 
         /// <summary>
