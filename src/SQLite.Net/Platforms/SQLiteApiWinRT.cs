@@ -58,7 +58,7 @@ namespace SQLite.Net.Platform.WinRT
         public Result BusyTimeout(IDbHandle db, int milliseconds)
         {
             var dbHandle = (DbHandle)db;
-            return (Result)SQLite3.BusyTimeout(dbHandle.InternalDbHandle, milliseconds);
+            return SQLite3.BusyTimeout(dbHandle.InternalDbHandle, milliseconds);
         }
 
         public int Changes(IDbHandle db)
@@ -70,7 +70,7 @@ namespace SQLite.Net.Platform.WinRT
         public Result Close(IDbHandle db)
         {
             var dbHandle = (DbHandle)db;
-            return (Result)SQLite3.Close(dbHandle.InternalDbHandle);
+            return SQLite3.Close(dbHandle.InternalDbHandle);
         }
 
         public Result Initialize()
@@ -84,7 +84,7 @@ namespace SQLite.Net.Platform.WinRT
 
         public Result Config(ConfigOption option)
         {
-            return (Result)SQLite3.Config(option);
+            return SQLite3.Config(option);
         }
 
 
@@ -148,7 +148,7 @@ namespace SQLite.Net.Platform.WinRT
         public ColType ColumnType(IDbStatement stmt, int index)
         {
             var dbStatement = (DbStatement)stmt;
-            return (ColType)SQLite3.ColumnType(dbStatement.InternalStmt, index);
+            return SQLite3.ColumnType(dbStatement.InternalStmt, index);
         }
 
         public int LibVersionNumber()
@@ -176,7 +176,7 @@ namespace SQLite.Net.Platform.WinRT
         {
             var dbStatement = (DbStatement)stmt;
             Sqlite3Statement internalStmt = dbStatement.InternalStmt;
-            return (Result)SQLite3.Finalize(internalStmt);
+            return SQLite3.Finalize(internalStmt);
         }
 
         public long LastInsertRowid(IDbHandle db)
@@ -188,7 +188,7 @@ namespace SQLite.Net.Platform.WinRT
         public Result Open(byte[] filename, out IDbHandle db, int flags, IntPtr zvfs)
         {
             Sqlite3DatabaseHandle internalDbHandle;
-            var ret = (Result)SQLite3.Open(filename, out internalDbHandle, flags, zvfs);
+            var ret = SQLite3.Open(filename, out internalDbHandle, flags, zvfs);
             db = new DbHandle(internalDbHandle);
             return ret;
         }
@@ -214,13 +214,13 @@ namespace SQLite.Net.Platform.WinRT
         public Result Reset(IDbStatement stmt)
         {
             var dbStatement = (DbStatement)stmt;
-            return (Result)SQLite3.Reset(dbStatement.InternalStmt);
+            return SQLite3.Reset(dbStatement.InternalStmt);
         }
 
         public Result Step(IDbStatement stmt)
         {
             var dbStatement = (DbStatement)stmt;
-            return (Result)SQLite3.Step(dbStatement.InternalStmt);
+            return SQLite3.Step(dbStatement.InternalStmt);
         }
 
         #region Backup
