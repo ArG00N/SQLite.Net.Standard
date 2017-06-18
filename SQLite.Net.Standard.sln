@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StocksDotNet", "examples\St
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLite.Net.Standard", "src\SQLite.Net.Standard\SQLite.Net.Standard.csproj", "{4971D437-0694-4297-A8CC-146CE08C3BD9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XamForms.UWP", "examples\XamForms.UWP\XamForms.UWP.csproj", "{C63C5247-D337-4525-A705-42366FA1A05D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StocksUWP", "examples\XamForms.UWP\StocksUWP.csproj", "{C63C5247-D337-4525-A705-42366FA1A05D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StocksShared", "examples\SQLite.Net.Standard.SampleShared\StocksShared.csproj", "{9A1ED959-56BE-48DB-BD07-545B00242318}"
 EndProject
