@@ -137,6 +137,16 @@
     </Reference>
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\SQLite.Net.Standard\SQLite.Net.Standard.csproj">
+      <Project>{4971d437-0694-4297-a8cc-146ce08c3bd9}</Project>
+      <Name>SQLite.Net.Standard</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\StocksShared\StocksShared.csproj">
+      <Project>{9a1ed959-56be-48db-bd07-545b00242318}</Project>
+      <Name>StocksShared</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="..\XamForms\XamForms.projitems" Label="Shared" Condition="Exists('..\XamForms\XamForms.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Forms.2.2.0.45\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.2.2.0.45\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />

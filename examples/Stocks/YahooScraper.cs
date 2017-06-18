@@ -29,7 +29,7 @@ namespace Stocks
                 }
             }
 #else
-            retVal.Add(new Valuation { StockId = stock.Id, Price = 10 });
+            retVal.Add(new Valuation { StockId = stock.Id, Price = 29 });
 #endif
 
             return retVal;

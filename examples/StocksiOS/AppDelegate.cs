@@ -4,6 +4,7 @@ using System.Linq;
 
 using Foundation;
 using UIKit;
+using System.IO;
 
 namespace XamForms.iOS
 {
@@ -23,9 +24,28 @@ namespace XamForms.iOS
 		public override bool FinishedLaunching(UIApplication app, NSDictionary options)
 		{
 			global::Xamarin.Forms.Forms.Init ();
-			LoadApplication (new XamForms.App ());
+
+            var myApp = new XamForms.App();
+            myApp.DBPath = GetLocalFilePath("Stocks.db");
+            myApp.SQLitePlatform = new SQLite.Net.Platform.XamarinIOS.SQLitePlatformIOS();
+
+            LoadApplication (myApp);
 
 			return base.FinishedLaunching (app, options);
 		}
-	}
+
+        public string GetLocalFilePath(string filename)
+        {
+            string docFolder = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+            string libFolder = Path.Combine(docFolder, "..", "Library", "Databases");
+
+            if (!Directory.Exists(libFolder))
+            {
+                Directory.CreateDirectory(libFolder);
+            }
+
+            return Path.Combine(libFolder, filename);
+        }
+
+    }
 }
