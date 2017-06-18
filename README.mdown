@@ -1,14 +1,8 @@
 # Pure .NET Standard C# SQLite Wrapper 
 
-# Forked From
-
-https://github.com/oysteinkrog/SQLite.Net-PCL
-
-Please follow the forks backward for earlier forks.
-
 # Purpose / Features
 
-## Provide a .NET Standard library that sits across the three main platforms: UWP, Android, and iOS with no platform specific libraries.
+## Provide a .NET Standard library that sits across the four main platforms: UWP, Android, .NET and iOS with no platform specific libraries.
 
 ## Provide flat table access with SQL queries. I.e. not being forced to use language integrated ORM like functionality. 
 
@@ -74,3 +68,9 @@ Note: This is not a complete, self inclusive example. You need to read between t
 
             return commandResult;
         }
+
+## Forked From
+
+https://github.com/oysteinkrog/SQLite.Net-PCL
+
+Please follow the forks backward for earlier forks.
