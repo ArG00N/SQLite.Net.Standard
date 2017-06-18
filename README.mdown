@@ -19,6 +19,30 @@ Install-Package SQLite.Net.Standard
 
 Note: This is not a complete, self inclusive example. You need to read between the lines here. This is an example of how to return a flat table of data in the SQLiteCommandResult structure. It used the ExecuteDeferredQuery method which is my main addition to the original repo.
 
+### Create Table:
+
+            Execute(
+            "CREATE TABLE VALUATION( " +
+            "    ID STRING PRIMARY KEY     NOT NULL, " +
+            "    STOCKID           INT NOT NULL, " +
+            "    Price           TEXT NOT NULL " +
+           ");");   
+
+### Insert
+
+            Execute("INSERT INTO VALUATION (ID, STOCKID, Price) VALUES(@Param1, @Param2, @Param3);", new object[] { Guid.NewGuid().ToString(), valuation.StockId, valuation.Price });
+
+### Read From Table
+
+        public SQLiteCommandResult GetData()
+        {
+            var command = CreateCommand("SELECT * FROM 'VALUATION'");
+            var data = command.ExecuteDeferredQuery();
+
+            return data;
+        }
+
+### Create SQLiteCommand Command
         private SQLiteCommand CreateCommand(string commandText, IList<DataParameter> parameters)
         {
             var command = _Connection.CreateCommand(commandText);
@@ -41,6 +65,7 @@ Note: This is not a complete, self inclusive example. You need to read between t
 
             return command;
         }
+
 
         private SQLiteCommandResult GetData(string commandText, IList<DataParameter> parameters, TableInfo tableInfo)
         {
