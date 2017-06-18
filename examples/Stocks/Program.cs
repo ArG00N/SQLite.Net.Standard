@@ -1,3 +1,4 @@
+using SQLite.Net.Platform.Generic;
 using System;
 using System.IO;
 using Path = System.IO.Path;
@@ -23,7 +24,7 @@ namespace Stocks.CommandLine
 
             Console.WriteLine("Creating database and valuation table...");
 
-            var database = new Stocks.Database(dbPath);
+            var database = new Stocks.Database(dbPath, new SQLitePlatformGeneric());
 
             Console.WriteLine("Downloading data and inserting in to table...");
 

@@ -1,4 +1,5 @@
 using SQLite.Net;
+using SQLite.Net.Interop;
 using SQLite.Net.Platform.Generic;
 using System;
 using System.Collections.Generic;
@@ -10,16 +11,14 @@ namespace Stocks
 {
     public class Database : SQLiteConnection
     {
-        public Database(string path) : base(new SQLitePlatformGeneric(), path)
+        public Database(string path, ISQLitePlatform platform) : base(platform, path)
         {
             Execute(
             "CREATE TABLE VALUATION( " +
             "    ID STRING PRIMARY KEY     NOT NULL, " +
             "    STOCKID           INT NOT NULL, " +
             "    Price           TEXT NOT NULL " +
-           ");");
-
-         
+           ");");      
         }
 
         public SQLiteCommandResult GetData()
