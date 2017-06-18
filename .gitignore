@@ -3,6 +3,7 @@
 *.userprefs
 *.suo
 *.DotSettings
+*.Designer.cs
 _Resharper*
 obj
 bin
