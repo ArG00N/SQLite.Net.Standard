@@ -1,7 +1,6 @@
 .DS_Store
 *.pidb
 *.userprefs
-*.user
 *.suo
 *.DotSettings
 _Resharper*

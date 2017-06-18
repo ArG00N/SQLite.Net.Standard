@@ -21,7 +21,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;CODE_ANALYSIS;XAMARINFORMS</DefineConstants>
+    <DefineConstants>DEBUG;CODE_ANALYSIS;CODE_ANALYSIS;XAMARINFORMS;DOTNETSTANDARD</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
@@ -102,6 +102,12 @@
     <CodeAnalysisDictionary Include="..\..\AES\CodeRulesDictionary.xml">
       <Link>CodeRulesDictionary.xml</Link>
     </CodeAnalysisDictionary>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\SQLite.Net.Standard\SQLite.Net.Standard.csproj">
+      <Project>{4971d437-0694-4297-a8cc-146ce08c3bd9}</Project>
+      <Name>SQLite.Net.Standard</Name>
+    </ProjectReference>
   </ItemGroup>
   <!--Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
