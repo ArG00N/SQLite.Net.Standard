@@ -1,10 +1,6 @@
 using SQLite.Net;
 using SQLite.Net.Interop;
-using SQLite.Net.Platform.Generic;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 
 namespace Stocks

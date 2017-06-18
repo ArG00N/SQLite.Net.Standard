@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -22,6 +23,8 @@ namespace XamForms.UWP
             this.InitializeComponent();
 
             var app = new XamForms.App();
+            app.DBPath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "Stocks.db"); ;
+            app.SQLitePlatform = new SQLite.Net.Platform.WinRT.SQLitePlatformWinRT(app.DBPath);
 
             LoadApplication(app);
         }

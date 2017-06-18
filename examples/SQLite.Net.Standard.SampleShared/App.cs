@@ -10,7 +10,7 @@ namespace XamForms
     {
         public Button MainButton;
         public ISQLitePlatform SQLitePlatform;
-        public string _DBPath;
+        public string DBPath;
 
         public App()
         {
@@ -34,26 +34,26 @@ namespace XamForms
         {
             MainButton.Text = string.Empty;
 
-            if (File.Exists(_DBPath))
+            if (File.Exists(DBPath))
             {
-                File.Delete(_DBPath);
+                File.Delete(DBPath);
             }
 
-            MainButton.Text += ("Creating database and valuation table...");
+            MainButton.Text += ("Creating database and valuation table...\r\n");
 
-            var database = new Stocks.Database(_DBPath, SQLitePlatform);
+            var database = new Stocks.Database(DBPath, SQLitePlatform);
 
-            MainButton.Text += ("Downloading data and inserting in to table...");
+            MainButton.Text += ("Downloading data and inserting in to table...\r\n");
 
             database.UpdateStock("GE");
 
-            MainButton.Text += ("Getting data from database...");
+            MainButton.Text += ("Getting data from database...\r\n");
 
             var data = database.GetData();
 
             foreach (var row in data.Data)
             {
-                MainButton.Text += ($"Price: {row["Price"]}");
+                MainButton.Text += ($"Price: {row["Price"]}\r\n");
             }
 
             MainButton.Text += ("Done.");
