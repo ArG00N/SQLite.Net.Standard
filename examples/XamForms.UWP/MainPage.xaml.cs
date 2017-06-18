@@ -21,7 +21,9 @@ namespace XamForms.UWP
         {
             this.InitializeComponent();
 
-            LoadApplication(new XamForms.App());
+            var app = new XamForms.App();
+
+            LoadApplication(app);
         }
     }
 }

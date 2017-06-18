@@ -6,7 +6,7 @@
     <ProjectGuid>{9E5D6B89-B69B-486B-9F7B-406BE8690589}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>Stocks</RootNamespace>
-    <AssemblyName>Stocks</AssemblyName>
+    <AssemblyName>StocksDotNet</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
