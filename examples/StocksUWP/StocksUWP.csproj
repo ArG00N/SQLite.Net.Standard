@@ -7,7 +7,7 @@
     <ProjectGuid>{C63C5247-D337-4525-A705-42366FA1A05D}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>a</RootNamespace>
+    <RootNamespace>StocksUWP</RootNamespace>
     <AssemblyName>StocksUWP</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
@@ -133,7 +133,7 @@
     </SDKReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SQLite.Net.Standard.SampleShared\StocksShared.csproj">
+    <ProjectReference Include="..\StocksShared\StocksShared.csproj">
       <Project>{9a1ed959-56be-48db-bd07-545b00242318}</Project>
       <Name>StocksShared</Name>
     </ProjectReference>
