@@ -13,7 +13,7 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "XamForms", "examples\XamFor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XamForms.UWP", "examples\XamForms.UWP\XamForms.UWP.csproj", "{C63C5247-D337-4525-A705-42366FA1A05D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLite.Net.Standard.SampleShared", "SQLite.Net.Standard.SampleShared\SQLite.Net.Standard.SampleShared.csproj", "{F9A8FBFB-5393-4C69-A84C-21321DBB75EA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLite.Net.Standard.SampleShared", "Examples\SQLite.Net.Standard.SampleShared\SQLite.Net.Standard.SampleShared.csproj", "{F9A8FBFB-5393-4C69-A84C-21321DBB75EA}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution

@@ -10,6 +10,8 @@ namespace Stocks
         {
             var retVal = new List<Valuation>();
 
+#if (!NETSTANDARD1_4)
+
             var url = $"http://finance.yahoo.com/d/quotes.csv?s=" + stock.Symbol + "&f=snd1l1yr";
 
             var req = System.Net.WebRequest.Create(url);
@@ -26,6 +28,9 @@ namespace Stocks
                     });
                 }
             }
+#else
+            retVal.Add(new Valuation { StockId = stock.Id, Price = 10 });
+#endif
 
             return retVal;
         }

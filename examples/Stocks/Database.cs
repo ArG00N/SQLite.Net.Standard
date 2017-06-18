@@ -47,7 +47,7 @@ namespace Stocks
 
                 Commit();
             }
-            catch (System.Net.WebException ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex);
             }

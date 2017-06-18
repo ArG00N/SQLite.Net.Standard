@@ -4,6 +4,17 @@
     <TargetFramework>netstandard1.4</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE;DEBUG;NETSTANDARD1_4</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Stocks\Database.cs" Link="Database.cs" />
+    <Compile Include="..\Stocks\Stock.cs" Link="Stock.cs" />
+    <Compile Include="..\Stocks\Valuation.cs" Link="Valuation.cs" />
+    <Compile Include="..\Stocks\YahooScraper.cs" Link="YahooScraper.cs" />
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="SQLite.Net.Standard" Version="1.0.0" />
   </ItemGroup>
