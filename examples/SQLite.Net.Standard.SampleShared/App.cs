@@ -7,37 +7,45 @@ using Xamarin.Forms;
 
 namespace XamForms
 {
-	public class App : Application
-	{
-		public App ()
-		{
-			// The root page of your application
-			MainPage = new ContentPage {
-				Content = new StackLayout {
-					VerticalOptions = LayoutOptions.Center,
-					Children = {
-						new Label {
-							HorizontalTextAlignment = TextAlignment.Center,
-							Text = "Welcome to Xamarin Forms!"
-						}
-					}
-				}
-			};
-		}
+    public class App : Application
+    {
+        public static Button MainButton;
 
-		protected override void OnStart ()
-		{
-			// Handle when your app starts
-		}
+        public App()
+        {
+            MainButton = new Button
+            {
+                Text = "Click Me",
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.FillAndExpand
+            };
 
-		protected override void OnSleep ()
-		{
-			// Handle when your app sleeps
-		}
+            // The root page of your application
+            MainPage = new ContentPage
+            {
+                Content = new StackLayout
+                {
+                    VerticalOptions = LayoutOptions.Center,
+                    Children = {
+                        MainButton
+                    }
+                }
+            };
+        }
 
-		protected override void OnResume ()
-		{
-			// Handle when your app resumes
-		}
-	}
+        protected override void OnStart()
+        {
+            // Handle when your app starts
+        }
+
+        protected override void OnSleep()
+        {
+            // Handle when your app sleeps
+        }
+
+        protected override void OnResume()
+        {
+            // Handle when your app resumes
+        }
+    }
 }
