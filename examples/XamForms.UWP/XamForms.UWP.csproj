@@ -132,7 +132,12 @@
       <Name>SQLite for Universal Windows Platform</Name>
     </SDKReference>
   </ItemGroup>
-  <Import Project="..\XamForms\XamForms.projitems" Label="Shared" />
+  <ItemGroup>
+    <ProjectReference Include="..\SQLite.Net.Standard.SampleShared\StocksShared.csproj">
+      <Project>{9a1ed959-56be-48db-bd07-545b00242318}</Project>
+      <Name>StocksShared</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
