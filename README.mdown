@@ -9,7 +9,7 @@
 ### Pull requests welcome! Any attempts to address the existing issues are welcome.
 
 # Quick Start
-Simply clone the repo, open the solution in Visual Studio 2017, and run the sample apps. There are samples for .NET, Android, iOS, and UWP. They all compile. They have all been tested with the exception of iOS (but this only have as a few lines of code different to other apps so should work).
+Simply clone the repo, open the solution in Visual Studio 2017, and run the sample apps. There are samples for .NET, Android, iOS, and UWP. They all compile and run. They have all been tested.
 
 # NuGet
 
