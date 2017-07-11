@@ -17,8 +17,6 @@ Install-Package SQLite.Net.Standard
 
 # Example
 
-Note: This is not a complete, self inclusive example. You need to read between the lines here. This is an example of how to return a flat table of data in the SQLiteCommandResult structure. It used the ExecuteDeferredQuery method which is my main addition to the original repo.
-
 ### Create Table:
 
             Execute(
@@ -43,6 +41,9 @@ Note: This is not a complete, self inclusive example. You need to read between t
         }
 
 ### Create SQLiteCommand Command
+
+Note: This is not a complete, self inclusive example. You need to read between the lines here. This is an example of how to return a flat table of data in the SQLiteCommandResult structure. It used the ExecuteDeferredQuery method which is my main addition to the original repo.
+
         private SQLiteCommand CreateCommand(string commandText, IList<DataParameter> parameters)
         {
             var command = _Connection.CreateCommand(commandText);
