@@ -2,9 +2,9 @@
 using System.Runtime.InteropServices;
 using SQLite.Net.Interop;
 
-namespace SQLite.Net.Platform.XamarinAndroid
+namespace SQLite.Net.Platform.AndroidXamarin
 {
-    internal static class SQLiteApiAndroidInternal
+    internal static class SQLiteApiAndroidXamarinInternal
     {
         private const string DllName = "sqlite3";
 

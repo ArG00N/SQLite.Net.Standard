@@ -2,13 +2,13 @@
 using System.Runtime.InteropServices;
 using SQLite.Net.Interop;
 
-namespace SQLite.Net.Platform.XamarinAndroid
+namespace SQLite.Net.Platform.AndroidXamarin
 {
-    public class SQLiteApiAndroid : ISQLiteApiExt
+    public class SQLiteApiAndroidXamarin : ISQLiteApiExt
     {
         public Result Open(byte[] filename, out IDbHandle db, int flags, IntPtr zvfs)
         {
-            var r = SQLiteApiAndroidInternal.sqlite3_open_v2(filename, out IntPtr dbPtr, flags, zvfs);
+            var r = SQLiteApiAndroidXamarinInternal.sqlite3_open_v2(filename, out IntPtr dbPtr, flags, zvfs);
             db = new DbHandle(dbPtr);
             return r;
         }
@@ -16,61 +16,61 @@ namespace SQLite.Net.Platform.XamarinAndroid
         public ExtendedResult ExtendedErrCode(IDbHandle db)
         {
             var internalDbHandle = (DbHandle)db;
-            return SQLiteApiAndroidInternal.sqlite3_extended_errcode(internalDbHandle.DbPtr);
+            return SQLiteApiAndroidXamarinInternal.sqlite3_extended_errcode(internalDbHandle.DbPtr);
         }
 
         public int LibVersionNumber()
         {
-            return SQLiteApiAndroidInternal.sqlite3_libversion_number();
+            return SQLiteApiAndroidXamarinInternal.sqlite3_libversion_number();
         }
 
         public string SourceID()
         {
-			return Marshal.PtrToStringAnsi(SQLiteApiAndroidInternal.sqlite3_sourceid());            
+			return Marshal.PtrToStringAnsi(SQLiteApiAndroidXamarinInternal.sqlite3_sourceid());            
         }                
 
         public Result EnableLoadExtension(IDbHandle db, int onoff)
         {
             var internalDbHandle = (DbHandle) db;
-            return SQLiteApiAndroidInternal.sqlite3_enable_load_extension(internalDbHandle.DbPtr, onoff);
+            return SQLiteApiAndroidXamarinInternal.sqlite3_enable_load_extension(internalDbHandle.DbPtr, onoff);
         }
 
         public Result Close(IDbHandle db)
         {
             var internalDbHandle = (DbHandle) db;
-            return SQLiteApiAndroidInternal.sqlite3_close(internalDbHandle.DbPtr);
+            return SQLiteApiAndroidXamarinInternal.sqlite3_close(internalDbHandle.DbPtr);
         }
 
         public Result Initialize()
         {
-            return SQLiteApiAndroidInternal.sqlite3_initialize();
+            return SQLiteApiAndroidXamarinInternal.sqlite3_initialize();
         }
         public Result Shutdown()
         {
-            return SQLiteApiAndroidInternal.sqlite3_shutdown();
+            return SQLiteApiAndroidXamarinInternal.sqlite3_shutdown();
         }
 
         public Result Config(ConfigOption option)
         {
-            return SQLiteApiAndroidInternal.sqlite3_config(option);
+            return SQLiteApiAndroidXamarinInternal.sqlite3_config(option);
         }
 
         public Result BusyTimeout(IDbHandle db, int milliseconds)
         {
             var internalDbHandle = (DbHandle) db;
-            return SQLiteApiAndroidInternal.sqlite3_busy_timeout(internalDbHandle.DbPtr, milliseconds);
+            return SQLiteApiAndroidXamarinInternal.sqlite3_busy_timeout(internalDbHandle.DbPtr, milliseconds);
         }
 
         public int Changes(IDbHandle db)
         {
             var internalDbHandle = (DbHandle) db;
-            return SQLiteApiAndroidInternal.sqlite3_changes(internalDbHandle.DbPtr);
+            return SQLiteApiAndroidXamarinInternal.sqlite3_changes(internalDbHandle.DbPtr);
         }
 
         public IDbStatement Prepare2(IDbHandle db, string query)
         {
             var internalDbHandle = (DbHandle) db;
-            var r = SQLiteApiAndroidInternal.sqlite3_prepare16_v2(internalDbHandle.DbPtr, query, -1, out IntPtr stmt, IntPtr.Zero);
+            var r = SQLiteApiAndroidXamarinInternal.sqlite3_prepare16_v2(internalDbHandle.DbPtr, query, -1, out IntPtr stmt, IntPtr.Zero);
             if (r != Result.OK)
             {
                 throw SQLiteException.New(r, Errmsg16(internalDbHandle));
@@ -81,133 +81,133 @@ namespace SQLite.Net.Platform.XamarinAndroid
         public Result Step(IDbStatement stmt)
         {
             var internalStmt = (DbStatement) stmt;
-            return SQLiteApiAndroidInternal.sqlite3_step(internalStmt.StmtPtr);
+            return SQLiteApiAndroidXamarinInternal.sqlite3_step(internalStmt.StmtPtr);
         }
 
         public Result Reset(IDbStatement stmt)
         {
             var internalStmt = (DbStatement) stmt;
-            return SQLiteApiAndroidInternal.sqlite3_reset(internalStmt.StmtPtr);
+            return SQLiteApiAndroidXamarinInternal.sqlite3_reset(internalStmt.StmtPtr);
         }
 
         public Result Finalize(IDbStatement stmt)
         {
             var internalStmt = (DbStatement) stmt;
-            return SQLiteApiAndroidInternal.sqlite3_finalize(internalStmt.StmtPtr);
+            return SQLiteApiAndroidXamarinInternal.sqlite3_finalize(internalStmt.StmtPtr);
         }
 
         public long LastInsertRowid(IDbHandle db)
         {
             var internalDbHandle = (DbHandle) db;
-            return SQLiteApiAndroidInternal.sqlite3_last_insert_rowid(internalDbHandle.DbPtr);
+            return SQLiteApiAndroidXamarinInternal.sqlite3_last_insert_rowid(internalDbHandle.DbPtr);
         }
 
         public string Errmsg16(IDbHandle db)
         {
             var internalDbHandle = (DbHandle) db;
-            return Marshal.PtrToStringUni(SQLiteApiAndroidInternal.sqlite3_errmsg16(internalDbHandle.DbPtr));
+            return Marshal.PtrToStringUni(SQLiteApiAndroidXamarinInternal.sqlite3_errmsg16(internalDbHandle.DbPtr));
         }
 
         public int BindParameterIndex(IDbStatement stmt, string name)
         {
             var internalStmt = (DbStatement) stmt;
-            return SQLiteApiAndroidInternal.sqlite3_bind_parameter_index(internalStmt.StmtPtr, name);
+            return SQLiteApiAndroidXamarinInternal.sqlite3_bind_parameter_index(internalStmt.StmtPtr, name);
         }
 
         public int BindNull(IDbStatement stmt, int index)
         {
             var internalStmt = (DbStatement) stmt;
-            return SQLiteApiAndroidInternal.sqlite3_bind_null(internalStmt.StmtPtr, index);
+            return SQLiteApiAndroidXamarinInternal.sqlite3_bind_null(internalStmt.StmtPtr, index);
         }
 
         public int BindInt(IDbStatement stmt, int index, int val)
         {
             var internalStmt = (DbStatement) stmt;
-            return SQLiteApiAndroidInternal.sqlite3_bind_int(internalStmt.StmtPtr, index, val);
+            return SQLiteApiAndroidXamarinInternal.sqlite3_bind_int(internalStmt.StmtPtr, index, val);
         }
 
         public int BindInt64(IDbStatement stmt, int index, long val)
         {
             var internalStmt = (DbStatement) stmt;
-            return SQLiteApiAndroidInternal.sqlite3_bind_int64(internalStmt.StmtPtr, index, val);
+            return SQLiteApiAndroidXamarinInternal.sqlite3_bind_int64(internalStmt.StmtPtr, index, val);
         }
 
         public int BindDouble(IDbStatement stmt, int index, double val)
         {
             var internalStmt = (DbStatement) stmt;
-            return SQLiteApiAndroidInternal.sqlite3_bind_double(internalStmt.StmtPtr, index, val);
+            return SQLiteApiAndroidXamarinInternal.sqlite3_bind_double(internalStmt.StmtPtr, index, val);
         }
 
         public int BindText16(IDbStatement stmt, int index, string val, int n, IntPtr free)
         {
             var internalStmt = (DbStatement) stmt;
-            return SQLiteApiAndroidInternal.sqlite3_bind_text16(internalStmt.StmtPtr, index, val, n, free);
+            return SQLiteApiAndroidXamarinInternal.sqlite3_bind_text16(internalStmt.StmtPtr, index, val, n, free);
         }
 
         public int BindBlob(IDbStatement stmt, int index, byte[] val, int n, IntPtr free)
         {
             var internalStmt = (DbStatement) stmt;
-            return SQLiteApiAndroidInternal.sqlite3_bind_blob(internalStmt.StmtPtr, index, val, n, free);
+            return SQLiteApiAndroidXamarinInternal.sqlite3_bind_blob(internalStmt.StmtPtr, index, val, n, free);
         }
 
         public int ColumnCount(IDbStatement stmt)
         {
             var internalStmt = (DbStatement) stmt;
-            return SQLiteApiAndroidInternal.sqlite3_column_count(internalStmt.StmtPtr);
+            return SQLiteApiAndroidXamarinInternal.sqlite3_column_count(internalStmt.StmtPtr);
         }
 
         public string ColumnName16(IDbStatement stmt, int index)
         {
             var internalStmt = (DbStatement) stmt;
-            return SQLiteApiAndroidInternal.ColumnName16(internalStmt.StmtPtr, index);
+            return SQLiteApiAndroidXamarinInternal.ColumnName16(internalStmt.StmtPtr, index);
         }
 
         public ColType ColumnType(IDbStatement stmt, int index)
         {
             var internalStmt = (DbStatement) stmt;
-            return SQLiteApiAndroidInternal.sqlite3_column_type(internalStmt.StmtPtr, index);
+            return SQLiteApiAndroidXamarinInternal.sqlite3_column_type(internalStmt.StmtPtr, index);
         }
 
         public int ColumnInt(IDbStatement stmt, int index)
         {
             var internalStmt = (DbStatement) stmt;
-            return SQLiteApiAndroidInternal.sqlite3_column_int(internalStmt.StmtPtr, index);
+            return SQLiteApiAndroidXamarinInternal.sqlite3_column_int(internalStmt.StmtPtr, index);
         }
 
         public long ColumnInt64(IDbStatement stmt, int index)
         {
             var internalStmt = (DbStatement) stmt;
-            return SQLiteApiAndroidInternal.sqlite3_column_int64(internalStmt.StmtPtr, index);
+            return SQLiteApiAndroidXamarinInternal.sqlite3_column_int64(internalStmt.StmtPtr, index);
         }
 
         public double ColumnDouble(IDbStatement stmt, int index)
         {
             var internalStmt = (DbStatement) stmt;
-            return SQLiteApiAndroidInternal.sqlite3_column_double(internalStmt.StmtPtr, index);
+            return SQLiteApiAndroidXamarinInternal.sqlite3_column_double(internalStmt.StmtPtr, index);
         }
 
         public string ColumnText16(IDbStatement stmt, int index)
         {
             var internalStmt = (DbStatement) stmt;
-            return Marshal.PtrToStringUni(SQLiteApiAndroidInternal.sqlite3_column_text16(internalStmt.StmtPtr, index));
+            return Marshal.PtrToStringUni(SQLiteApiAndroidXamarinInternal.sqlite3_column_text16(internalStmt.StmtPtr, index));
         }
 
         public byte[] ColumnBlob(IDbStatement stmt, int index)
         {
             var internalStmt = (DbStatement) stmt;
-            return SQLiteApiAndroidInternal.ColumnBlob(internalStmt.StmtPtr, index);
+            return SQLiteApiAndroidXamarinInternal.ColumnBlob(internalStmt.StmtPtr, index);
         }
 
         public int ColumnBytes(IDbStatement stmt, int index)
         {
             var internalStmt = (DbStatement) stmt;
-            return SQLiteApiAndroidInternal.sqlite3_column_bytes(internalStmt.StmtPtr, index);
+            return SQLiteApiAndroidXamarinInternal.sqlite3_column_bytes(internalStmt.StmtPtr, index);
         }
 
         public byte[] ColumnByteArray(IDbStatement stmt, int index)
         {
             var internalStmt = (DbStatement) stmt;
-            return SQLiteApiAndroidInternal.ColumnByteArray(internalStmt.StmtPtr, index);
+            return SQLiteApiAndroidXamarinInternal.ColumnByteArray(internalStmt.StmtPtr, index);
         }
 
         #region Backup
@@ -216,7 +216,7 @@ namespace SQLite.Net.Platform.XamarinAndroid
         	var internalDestDb = (DbHandle)destHandle;
         	var internalSrcDb = (DbHandle)srcHandle;
         
-        	var p = SQLiteApiAndroidInternal.sqlite3_backup_init(internalDestDb.DbPtr, 
+        	var p = SQLiteApiAndroidXamarinInternal.sqlite3_backup_init(internalDestDb.DbPtr, 
         	                                                        destName, 
         	                                                        internalSrcDb.DbPtr, 
         	                                                        srcName);
@@ -230,26 +230,26 @@ namespace SQLite.Net.Platform.XamarinAndroid
         
         public Result BackupStep(IDbBackupHandle handle, int pageCount) {
         	var internalBackup = (DbBackupHandle)handle;
-        	return SQLiteApiAndroidInternal.sqlite3_backup_step(internalBackup.DbBackupPtr, pageCount);
+        	return SQLiteApiAndroidXamarinInternal.sqlite3_backup_step(internalBackup.DbBackupPtr, pageCount);
         }
         
         public Result BackupFinish(IDbBackupHandle handle) {
         	var internalBackup = (DbBackupHandle)handle;
-        	return SQLiteApiAndroidInternal.sqlite3_backup_finish(internalBackup.DbBackupPtr);
+        	return SQLiteApiAndroidXamarinInternal.sqlite3_backup_finish(internalBackup.DbBackupPtr);
         }
         
         public int BackupRemaining(IDbBackupHandle handle) {
         	var internalBackup = (DbBackupHandle)handle;
-        	return SQLiteApiAndroidInternal.sqlite3_backup_remaining(internalBackup.DbBackupPtr);
+        	return SQLiteApiAndroidXamarinInternal.sqlite3_backup_remaining(internalBackup.DbBackupPtr);
         }
         
         public int BackupPagecount(IDbBackupHandle handle) {
         	var internalBackup = (DbBackupHandle)handle;
-        	return SQLiteApiAndroidInternal.sqlite3_backup_pagecount(internalBackup.DbBackupPtr);
+        	return SQLiteApiAndroidXamarinInternal.sqlite3_backup_pagecount(internalBackup.DbBackupPtr);
         }
         
         public int Sleep(int millis) {
-        	return SQLiteApiAndroidInternal.sqlite3_sleep(millis);
+        	return SQLiteApiAndroidXamarinInternal.sqlite3_sleep(millis);
         }
         
         private struct DbBackupHandle : IDbBackupHandle {
