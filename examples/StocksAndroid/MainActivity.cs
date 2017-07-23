@@ -19,7 +19,7 @@ namespace XamForms.Droid
 
             var app = new XamForms.App();
             app.DBPath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "stocks.db");
-            app.SQLitePlatform = new SQLite.Net.Platform.XamarinAndroid.SQLitePlatformAndroid();
+            app.SQLitePlatform = new SQLite.Net.Platform.AndroidXamarin.SQLitePlatformAndroidXamarin();
 
             LoadApplication (app);
 		}

@@ -6,7 +6,7 @@ namespace SQLite.Net.Platform.AndroidXamarin
 {
     internal static class SQLiteApiAndroidXamarinInternal
     {
-        private const string DllName = "sqlite3";
+        private const string DllName = "libsqlite3_xamarin";
 
         [DllImport(DllName, EntryPoint = "sqlite3_column_blob", CallingConvention = CallingConvention.Cdecl)]
         public static extern byte[] ColumnBlob(IntPtr stmt, int index);
