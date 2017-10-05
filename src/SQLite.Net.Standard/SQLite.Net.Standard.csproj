@@ -156,13 +156,10 @@
     <Compile Include="Platforms\SQLiteApiGenericInternal.cs" />
     <Compile Include="Platforms\SQLiteApiIOS.cs" />
     <Compile Include="Platforms\SQLiteApiIOSInternal.cs" />
-    <Compile Include="Platforms\SQLiteApiOSX.cs" />
-    <Compile Include="Platforms\SQliteApiOSXInternal.cs" />
     <Compile Include="Platforms\SQLiteApiWinRT.cs" />
     <Compile Include="Platforms\SQLitePlatformAndroid.cs" />
     <Compile Include="Platforms\SQLitePlatformGeneric.cs" />
     <Compile Include="Platforms\SQLitePlatformIOS.cs" />
-    <Compile Include="Platforms\SQLitePlatformOSX.cs" />
     <Compile Include="Platforms\SQLitePlatformWinRT.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Interop\CreateFlags.cs" />
